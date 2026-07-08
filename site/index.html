@@ -27,6 +27,7 @@
       <nav class="nav__links" aria-label="주요 메뉴">
         <a href="#thesis">단맛</a>
         <a href="#lineup">라인업</a>
+        <a href="#origins">산지</a>
         <a href="#shop">원두</a>
         <a href="#season">제철</a>
         <a href="#class">클래스</a>
@@ -39,6 +40,7 @@
     <div class="nav__drawer" data-drawer hidden>
       <a href="#thesis">단맛</a>
       <a href="#lineup">라인업</a>
+      <a href="#origins">산지</a>
       <a href="#shop">원두</a>
       <a href="#season">제철</a>
       <a href="#class">클래스</a>
@@ -226,6 +228,153 @@
             </div>
           </article>
         </div>
+      </div>
+    </section>
+
+    <!-- SINGLE ORIGIN (flag-map label cards) -->
+    <section class="origins section" id="origins" aria-labelledby="origins-title">
+      <div class="wrap">
+        <div class="section__head">
+          <p class="eyebrow reveal" data-reveal><span class="eyebrow__dot"></span>싱글 오리진 · SINGLE ORIGIN</p>
+          <h2 class="h2 reveal" data-reveal id="origins-title">산지가 곧 근거입니다.</h2>
+        </div>
+        <div class="origins__grid">
+
+          <!-- Guatemala -->
+          <article class="origin reveal" data-reveal>
+            <div class="origin__media">
+              <svg class="flag" viewBox="0 0 100 100" role="img" aria-label="과테말라 국기">
+                <defs><clipPath id="c-gt"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+                <g clip-path="url(#c-gt)">
+                  <rect width="100" height="100" fill="#ffffff"/>
+                  <rect width="33.3" height="100" fill="#4997D0"/>
+                  <rect x="66.7" width="33.3" height="100" fill="#4997D0"/>
+                  <circle cx="50" cy="50" r="12" fill="none" stroke="#5c8a3a" stroke-width="2.5"/>
+                  <rect x="47.5" y="41" width="5" height="18" rx="1" fill="#9aa7ad"/>
+                </g>
+              </svg>
+              <span class="origin__country mono">Guatemala</span>
+            </div>
+            <div class="origin__body">
+              <h3 class="origin__name">Guatemala Antigua<br />Strictly Hard Bean</h3>
+              <p class="origin__kr">과테말라 안티구아 SHB</p>
+              <div class="spec">
+                <div><dt class="mono">생산지</dt><dd>안티구아 Antigua</dd></div>
+                <div><dt class="mono">재배고도</dt><dd>1,500 – 1,800M</dd></div>
+                <div><dt class="mono">품종</dt><dd>Bourbon, Pacas</dd></div>
+                <div><dt class="mono">등급</dt><dd>SHB (Strictly Hard Bean)</dd></div>
+                <div><dt class="mono">가공</dt><dd>Washed</dd></div>
+                <div class="cup"><dt class="mono">Cupping</dt><dd>당밀 · 초콜릿 · 다크초콜릿</dd></div>
+              </div>
+              <div class="origin__foot">
+                <span class="origin__price">19,000<small> 원</small></span>
+                <button class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>담기</button>
+              </div>
+            </div>
+            <p class="origin__stamp">Roasted by Doha Coffee</p>
+          </article>
+
+          <!-- Ethiopia -->
+          <article class="origin reveal" data-reveal>
+            <div class="origin__media">
+              <svg class="flag" viewBox="0 0 100 100" role="img" aria-label="에티오피아 국기">
+                <defs><clipPath id="c-et"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+                <g clip-path="url(#c-et)">
+                  <rect width="100" height="33.4" fill="#078930"/>
+                  <rect y="33.3" width="100" height="33.4" fill="#FCDD09"/>
+                  <rect y="66.6" width="100" height="33.4" fill="#DA121A"/>
+                  <circle cx="50" cy="50" r="20" fill="#0F47AF"/>
+                  <polygon points="50,37 53.9,46.9 62.4,45.9 54.8,51.5 57.6,60.5 50,55 42.4,60.5 45.2,51.5 37.6,45.9 46.1,46.9" fill="#FCDD09"/>
+                </g>
+              </svg>
+              <span class="origin__country mono">Ethiopia</span>
+            </div>
+            <div class="origin__body">
+              <h3 class="origin__name">Ethiopia Yirgacheffe<br />Grade 1</h3>
+              <p class="origin__kr">에티오피아 예가체프 G1</p>
+              <div class="spec">
+                <div><dt class="mono">생산지</dt><dd>예가체프 Yirgacheffe</dd></div>
+                <div><dt class="mono">재배고도</dt><dd>1,770 – 2,200M</dd></div>
+                <div><dt class="mono">품종</dt><dd>Heirloom</dd></div>
+                <div><dt class="mono">등급</dt><dd>G1</dd></div>
+                <div><dt class="mono">가공</dt><dd>Washed</dd></div>
+                <div class="cup"><dt class="mono">Cupping</dt><dd>자스민 · 홍차 · 브라운슈가</dd></div>
+              </div>
+              <div class="origin__foot">
+                <span class="origin__price">20,000<small> 원</small></span>
+                <button class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>담기</button>
+              </div>
+            </div>
+            <p class="origin__stamp">Roasted by Doha Coffee</p>
+          </article>
+
+          <!-- Colombia -->
+          <article class="origin reveal" data-reveal>
+            <div class="origin__media">
+              <svg class="flag" viewBox="0 0 100 100" role="img" aria-label="콜롬비아 국기">
+                <defs><clipPath id="c-co"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+                <g clip-path="url(#c-co)">
+                  <rect width="100" height="50" fill="#FCD116"/>
+                  <rect y="50" width="100" height="25" fill="#003893"/>
+                  <rect y="75" width="100" height="25" fill="#CE1126"/>
+                </g>
+              </svg>
+              <span class="origin__country mono">Colombia</span>
+            </div>
+            <div class="origin__body">
+              <h3 class="origin__name">Colombia Huila<br />Supremo</h3>
+              <p class="origin__kr">콜롬비아 후일라 슈프리모</p>
+              <div class="spec">
+                <div><dt class="mono">생산지</dt><dd>후일라 Huila</dd></div>
+                <div><dt class="mono">재배고도</dt><dd>1,400 – 2,000M</dd></div>
+                <div><dt class="mono">품종</dt><dd>Caturra, Castillo</dd></div>
+                <div><dt class="mono">등급</dt><dd>Supremo</dd></div>
+                <div><dt class="mono">가공</dt><dd>Washed</dd></div>
+                <div class="cup"><dt class="mono">Cupping</dt><dd>붉은 과일 · 감귤 · 브라운슈가</dd></div>
+              </div>
+              <div class="origin__foot">
+                <span class="origin__price">18,000<small> 원</small></span>
+                <button class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>담기</button>
+              </div>
+            </div>
+            <p class="origin__stamp">Roasted by Doha Coffee</p>
+          </article>
+
+          <!-- Tanzania -->
+          <article class="origin reveal" data-reveal>
+            <div class="origin__media">
+              <svg class="flag" viewBox="0 0 100 100" role="img" aria-label="탄자니아 국기">
+                <defs><clipPath id="c-tz"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+                <g clip-path="url(#c-tz)">
+                  <rect width="100" height="100" fill="#1EB53A"/>
+                  <polygon points="100,0 100,100 0,100" fill="#00A3DD"/>
+                  <line x1="0" y1="100" x2="100" y2="0" stroke="#FCD116" stroke-width="34"/>
+                  <line x1="0" y1="100" x2="100" y2="0" stroke="#000000" stroke-width="22"/>
+                </g>
+              </svg>
+              <span class="origin__country mono">Tanzania</span>
+            </div>
+            <div class="origin__body">
+              <h3 class="origin__name">Tanzania Kilimanjaro<br />AA</h3>
+              <p class="origin__kr">탄자니아 킬리만자로 AA</p>
+              <div class="spec">
+                <div><dt class="mono">생산지</dt><dd>킬리만자로 Kibo</dd></div>
+                <div><dt class="mono">재배고도</dt><dd>1,500M</dd></div>
+                <div><dt class="mono">품종</dt><dd>Kent, Bourbon</dd></div>
+                <div><dt class="mono">등급</dt><dd>AA</dd></div>
+                <div><dt class="mono">가공</dt><dd>Washed</dd></div>
+                <div class="cup"><dt class="mono">Cupping</dt><dd>카라멜 · 밀크초콜릿 · 누룽지</dd></div>
+              </div>
+              <div class="origin__foot">
+                <span class="origin__price">21,000<small> 원</small></span>
+                <button class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>담기</button>
+              </div>
+            </div>
+            <p class="origin__stamp">Roasted by Doha Coffee</p>
+          </article>
+
+        </div>
+        <p class="shop__foot reveal" data-reveal>* 산지 정보는 라벨 기준 예시이며, 실제 로트에 따라 달라질 수 있습니다.</p>
       </div>
     </section>
 
