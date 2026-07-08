@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.className += ' js';</script>
+  <title>도하커피 — 커피는 오로지 맛 | 원두 · 커피 클래스</title>
+  <meta name="description" content="시장은 산미로 갔지만, 도하커피는 달고나 같은 단맛으로 갑니다. 8년·800명을 가르친 국가자격 바리스타가 '왜 맛있는지'까지 알려주는 홈카페 원두와 커피 클래스. 전남 나주 하이엔드 로스터리." />
+  <meta property="og:title" content="도하커피 — 커피는 오로지 맛" />
+  <meta property="og:description" content="달고나 같은 단맛, 근거로 증명합니다. 홈카페 원두 · 커피 클래스." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+
+  <!-- ─────────────────────────── NAV ─────────────────────────── -->
+  <header class="nav" id="nav" data-nav>
+    <div class="wrap nav__inner">
+      <a class="brand" href="#top" aria-label="도하커피 홈">
+        <span class="brand__mark" aria-hidden="true">
+          <span class="brand__bean"></span>
+        </span>
+        <span class="brand__name">도하커피</span>
+      </a>
+
+      <nav class="nav__links" aria-label="주요 메뉴">
+        <a href="#thesis">단맛</a>
+        <a href="#evidence">근거</a>
+        <a href="#beans">원두</a>
+        <a href="#class">클래스</a>
+        <a href="#visit">방문</a>
+      </nav>
+
+      <a class="btn btn--sm btn--solid nav__cta" href="#beans">원두 보기</a>
+
+      <button class="nav__toggle" aria-label="메뉴 열기" aria-expanded="false" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nav__drawer" data-drawer hidden>
+      <a href="#thesis">단맛</a>
+      <a href="#evidence">근거</a>
+      <a href="#beans">원두</a>
+      <a href="#class">클래스</a>
+      <a href="#visit">방문</a>
+      <a class="btn btn--solid" href="#beans">원두 보러가기</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <!-- ─────────────────────────── HERO ─────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow reveal" data-reveal>
+            <span class="eyebrow__dot"></span>전남 나주 · 하이엔드 로스터리
+          </p>
+
+          <h1 class="hero__title" id="hero-title">
+            <span class="line reveal" data-reveal>커피는</span>
+            <span class="line reveal" data-reveal>오로지 <em>맛.</em></span>
+          </h1>
+
+          <p class="hero__lead reveal" data-reveal>
+            시장은 산미로 갔지만, 우리는 <b>달고나 같은 단맛</b>으로 갑니다.
+            8년·800명을 가르친 국가자격 바리스타가
+            <b>‘왜 맛있는지’</b>까지 알려주는 홈카페 원두와 커피 클래스.
+          </p>
+
+          <div class="hero__cta reveal" data-reveal>
+            <a class="btn btn--solid" href="#beans">원두 보러가기</a>
+            <a class="btn btn--ghost" href="#class">커피 클래스 →</a>
+          </div>
+
+          <ul class="hero__chips reveal" data-reveal>
+            <li>국가자격 평생교육사</li>
+            <li>바리스타</li>
+            <li>8년 · 800명+ 교육</li>
+          </ul>
+        </div>
+
+        <!-- SIGNATURE: 단맛 곡선 -->
+        <figure class="curve reveal" data-reveal aria-labelledby="curve-cap">
+          <div class="curve__frame">
+            <span class="curve__axis curve__axis--y">단맛 <span>SWEETNESS</span></span>
+            <svg class="curve__svg" viewBox="0 0 420 300" role="img" aria-label="로스팅 단계에 따른 단맛 곡선. 미디엄 로스트 부근에서 달고나 스윗스팟으로 정점에 이른다.">
+              <defs>
+                <linearGradient id="molten" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0" stop-color="#C77E33" />
+                  <stop offset="0.55" stop-color="#EBA94E" />
+                  <stop offset="1" stop-color="#F6C878" />
+                </linearGradient>
+                <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#EBA94E" stop-opacity="0.28" />
+                  <stop offset="1" stop-color="#EBA94E" stop-opacity="0" />
+                </linearGradient>
+                <radialGradient id="spot" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#FBE0A6" />
+                  <stop offset="1" stop-color="#EBA94E" />
+                </radialGradient>
+              </defs>
+
+              <!-- gridlines -->
+              <g class="curve__grid">
+                <line x1="40" y1="40" x2="40" y2="250" />
+                <line x1="40" y1="250" x2="400" y2="250" />
+                <line x1="40" y1="170" x2="400" y2="170" />
+                <line x1="40" y1="90" x2="400" y2="90" />
+              </g>
+
+              <!-- area under curve -->
+              <path class="curve__area" d="M40,250 C120,235 150,90 220,86 C300,82 340,150 400,205 L400,250 Z" fill="url(#fill)" />
+              <!-- the curve -->
+              <path class="curve__path" d="M40,250 C120,235 150,90 220,86 C300,82 340,150 400,205"
+                    fill="none" stroke="url(#molten)" stroke-width="4" stroke-linecap="round" />
+
+              <!-- sweet spot -->
+              <g class="curve__spot" transform="translate(220,86)">
+                <circle class="curve__spot-halo" r="20" />
+                <circle class="curve__spot-dot" r="7" fill="url(#spot)" />
+              </g>
+            </svg>
+            <div class="curve__spotlabel">
+              <span class="mono">달고나 스윗스팟</span>
+              <span class="curve__meta mono">1:15 · 92℃ · 2:30</span>
+            </div>
+            <div class="curve__x mono">
+              <span>라이트</span><span>미디엄</span><span>다크</span>
+            </div>
+          </div>
+          <figcaption class="curve__cap mono" id="curve-cap">FIG.01 — 로스팅 × 단맛 프로파일</figcaption>
+        </figure>
+      </div>
+
+      <div class="hero__scroll mono" aria-hidden="true">SCROLL ↓</div>
+    </section>
+
+    <!-- 마퀴 divider -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>커피는 오로지 맛</span><span class="sep">·</span>
+        <span>피셜은 빼고, 맛만</span><span class="sep">·</span>
+        <span>달고나 같은 단맛</span><span class="sep">·</span>
+        <span>감이 아니라 근거로</span><span class="sep">·</span>
+        <span>커피는 오로지 맛</span><span class="sep">·</span>
+        <span>피셜은 빼고, 맛만</span><span class="sep">·</span>
+        <span>달고나 같은 단맛</span><span class="sep">·</span>
+        <span>감이 아니라 근거로</span><span class="sep">·</span>
+      </div>
+    </div>
+
+    <!-- ─────────────────────── THESIS: 왜 단맛 ─────────────────────── -->
+    <section class="thesis section" id="thesis" aria-labelledby="thesis-title">
+      <div class="wrap grid-2">
+        <div class="thesis__head">
+          <p class="eyebrow reveal" data-reveal><span class="eyebrow__dot"></span>포지션 · POSITION</p>
+          <h2 class="h2 reveal" data-reveal id="thesis-title">산미가 아니라,<br /><em>단맛.</em></h2>
+          <p class="lead reveal" data-reveal>
+            잘 볶고 잘 내리면 커피는 고소하면서 달짝지근해집니다.
+            달고나를 한 입 베어 문 것 같은 그 단맛 — 유행하는 신맛이 아니라
+            <b>커피 본연의 오리지널 단맛</b>을 촌스럽지 않게, 트렌디하게 재해석합니다.
+          </p>
+        </div>
+
+        <div class="thesis__panel reveal" data-reveal>
+          <div class="spectrum" data-spectrum>
+            <div class="spectrum__labels mono">
+              <span>산미 · ACIDITY</span>
+              <span>단맛 · SWEETNESS</span>
+            </div>
+            <div class="spectrum__track">
+              <div class="spectrum__fill" data-spectrum-fill></div>
+              <div class="spectrum__marker" data-spectrum-marker>
+                <span class="spectrum__flag">도하의 자리</span>
+              </div>
+            </div>
+            <p class="spectrum__note mono">시장 대부분이 왼쪽에 있을 때, 우리는 오른쪽을 판다.</p>
+          </div>
+
+          <div class="how">
+            <div class="how__item reveal" data-reveal>
+              <span class="how__k mono">로스팅</span>
+              <p>단맛을 살리는 방향으로 볶습니다. 왜 이 프로파일인지 라벨로 설명합니다.</p>
+            </div>
+            <div class="how__item reveal" data-reveal>
+              <span class="how__k mono">추출</span>
+              <p>단맛을 극대화하는 비율·온도·시간으로 내립니다. 감이 아니라 수치로.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────── EVIDENCE: 근거 ───────────────────── -->
+    <section class="evidence section" id="evidence" aria-labelledby="ev-title">
+      <div class="wrap">
+        <div class="section__head center">
+          <p class="eyebrow reveal" data-reveal><span class="eyebrow__dot"></span>근거 · EVIDENCE</p>
+          <h2 class="h2 reveal" data-reveal id="ev-title">피셜은 빼고,<br /><em>맛만 담았습니다.</em></h2>
+          <p class="lead lead--center reveal" data-reveal>
+            모든 주장에는 근거가 있습니다. 커피분석센터의 검증된 이론과 8년의 실무로,
+            감(感)이 아니라 원리로 내립니다.
+          </p>
+        </div>
+
+        <div class="stats">
+          <div class="stat reveal" data-reveal>
+            <span class="stat__num mono" data-count="8" data-suffix="년">8년</span>
+            <span class="stat__label">교육 경력</span>
+          </div>
+          <div class="stat reveal" data-reveal>
+            <span class="stat__num mono" data-count="800" data-suffix="명+">800명+</span>
+            <span class="stat__label">누적 수료생</span>
+          </div>
+          <div class="stat reveal" data-reveal>
+            <span class="stat__num mono stat__num--text">국가자격</span>
+            <span class="stat__label">평생교육사 · 바리스타</span>
+          </div>
+          <div class="stat reveal" data-reveal>
+            <span class="stat__num mono" data-count="1" data-suffix="곳">1곳</span>
+            <span class="stat__label">나주 하이엔드 매장</span>
+          </div>
+        </div>
+
+        <!-- 방식: 문제 → 원인 → 해결 → 재현 -->
+        <div class="method reveal" data-reveal>
+          <p class="method__title mono">우리의 방식</p>
+          <ol class="method__flow">
+            <li><span class="mono">문제</span>왜 맛없는지</li>
+            <li><span class="mono">원인</span>어디서 틀렸는지</li>
+            <li><span class="mono">해결</span>원리로 바로잡기</li>
+            <li><span class="mono">재현</span>다시 맛있게</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────── BEANS: 원두 ─────────────────────── -->
+    <section class="beans section" id="beans" aria-labelledby="beans-title">
+      <div class="wrap">
+        <div class="section__head">
+          <p class="eyebrow reveal" data-reveal><span class="eyebrow__dot"></span>원두 · BEANS</p>
+          <h2 class="h2 reveal" data-reveal id="beans-title">실패 없는 첫 잔부터,<br /><em>마니아의 싱글오리진까지.</em></h2>
+        </div>
+
+        <div class="beans__grid">
+          <!-- 입문 -->
+          <article class="bean reveal" data-reveal>
+            <header class="bean__top">
+              <span class="bean__tag mono">입문</span>
+              <span class="bean__price mono">₩14,000<span>/200g</span></span>
+            </header>
+            <h3 class="bean__name">실패 없는 첫 원두</h3>
+            <p class="bean__desc">누가 내려도 무너지지 않는 밸런스. 홈카페 첫 봉투로.</p>
+            <div class="roast" data-roast="2" aria-label="로스트 레벨 미디엄">
+              <span class="roast__k mono">ROAST</span>
+              <span class="roast__meter"><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="roast__v mono">미디엄</span>
+            </div>
+            <ul class="bean__notes"><li>고소함</li><li>단맛</li><li>부드러움</li></ul>
+            <p class="bean__brew mono">추천 추출 · 1:15 · 92℃ · 2:30</p>
+          </article>
+
+          <!-- 취향 -->
+          <article class="bean bean--wide reveal" data-reveal>
+            <header class="bean__top">
+              <span class="bean__tag mono">취향 · 3종</span>
+              <span class="bean__price mono">₩16,000<span>/200g</span></span>
+            </header>
+            <h3 class="bean__name">취향대로 고르는 세 갈래</h3>
+            <p class="bean__desc">카카오채널 3문항 진단 후, 딱 맞는 한 봉지를 추천합니다.</p>
+            <div class="picks">
+              <span class="pick"><b>산미형</b><i class="mono">밝고 산뜻</i></span>
+              <span class="pick pick--on"><b>밸런스형</b><i class="mono">고소한 단맛</i></span>
+              <span class="pick"><b>다크형</b><i class="mono">진한 바디</i></span>
+            </div>
+            <p class="bean__brew mono">취향 진단 → 맞춤 추천 → 반복 구매</p>
+          </article>
+
+          <!-- 하이엔드 -->
+          <article class="bean bean--dark reveal" data-reveal>
+            <header class="bean__top">
+              <span class="bean__tag mono">하이엔드</span>
+              <span class="bean__price mono">₩29,000<span>/200g</span></span>
+            </header>
+            <h3 class="bean__name">나주 스페셜티 싱글오리진</h3>
+            <p class="bean__desc">개성과 품질은 그대로, 단맛을 입힌 프로파일. 마니아와 선물용.</p>
+            <div class="roast" data-roast="3" aria-label="로스트 레벨 미디엄다크">
+              <span class="roast__k mono">ROAST</span>
+              <span class="roast__meter"><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="roast__v mono">미디엄-다크</span>
+            </div>
+            <ul class="bean__notes"><li>캐러멜</li><li>다크초콜릿</li><li>긴 여운</li></ul>
+            <p class="bean__brew mono">로스팅 근거 라벨 동봉</p>
+          </article>
+
+          <!-- 구독 -->
+          <article class="bean bean--sub reveal" data-reveal>
+            <header class="bean__top">
+              <span class="bean__tag mono">구독</span>
+              <span class="bean__price mono">2주 · 4주</span>
+            </header>
+            <h3 class="bean__name">신선하게, 알아서 도착</h3>
+            <p class="bean__desc">주기에 맞춰 자동 배송. 봉투 QR을 찍으면 그 원두의 추출 영상으로.</p>
+            <div class="qr" aria-hidden="true">
+              <span class="qr__box"><span class="qr__grid"></span></span>
+              <span class="qr__cap mono">QR → 추출 가이드</span>
+            </div>
+            <p class="bean__brew mono">정기배송 · 언제든 해지</p>
+          </article>
+        </div>
+
+        <p class="beans__foot mono reveal" data-reveal>* 표기 가격은 디자인 시안용 예시입니다.</p>
+      </div>
+    </section>
+
+    <!-- ─────────────────────── CLASS: 클래스 ─────────────────────── -->
+    <section class="class section" id="class" aria-labelledby="class-title">
+      <div class="wrap grid-2 grid-2--sticky">
+        <div class="class__head">
+          <p class="eyebrow reveal" data-reveal><span class="eyebrow__dot"></span>클래스 · CLASS</p>
+          <h2 class="h2 reveal" data-reveal id="class-title">왜 맛있는지까지 배우면,<br /><em>스스로 재현합니다.</em></h2>
+          <p class="lead reveal" data-reveal>
+            “이렇게 하세요”로 끝내지 않습니다. 원리를 이해하면 매번 운에 맡기지 않아도 됩니다.
+            나주가 멀어도 괜찮습니다 — 온라인 VOD·라이브로 전국 어디서나.
+          </p>
+          <a class="btn btn--ghost reveal" data-reveal href="#visit">클래스 문의 →</a>
+        </div>
+
+        <ol class="ladder">
+          <li class="ladder__step reveal" data-reveal>
+            <span class="ladder__no mono">01</span>
+            <div class="ladder__body">
+              <div class="ladder__row">
+                <h3>원데이 홈카페</h3>
+                <span class="ladder__mode mono">오프라인 · 온라인</span>
+              </div>
+              <p>부담 없는 첫 경험. 손맛의 감을 잡고 시작합니다.</p>
+            </div>
+          </li>
+          <li class="ladder__step reveal" data-reveal>
+            <span class="ladder__no mono">02</span>
+            <div class="ladder__body">
+              <div class="ladder__row">
+                <h3>핸드드립 마스터 · 4주</h3>
+                <span class="ladder__mode mono">오프라인 · 소수정예</span>
+              </div>
+              <p>추출의 원리를 4주에 걸쳐. 스스로 레시피를 설계하게 됩니다.</p>
+            </div>
+          </li>
+          <li class="ladder__step reveal" data-reveal>
+            <span class="ladder__no mono">03</span>
+            <div class="ladder__body">
+              <div class="ladder__row">
+                <h3>실패 없는 추출 · VOD</h3>
+                <span class="ladder__mode mono">온라인 · 무제한</span>
+              </div>
+              <p>지역 한계를 넘어. 반복해서 보고 그대로 따라 하면 됩니다.</p>
+            </div>
+          </li>
+          <li class="ladder__step reveal" data-reveal>
+            <span class="ladder__no mono">04</span>
+            <div class="ladder__body">
+              <div class="ladder__row">
+                <h3>바리스타 · 지도자 심화</h3>
+                <span class="ladder__mode mono">오프라인 · 전문가</span>
+              </div>
+              <p>가르치는 사람을 기르는 과정. 커피를 업으로 삼으려는 분께.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ─────────────────────── VISIT / CTA ─────────────────────── -->
+    <section class="visit section" id="visit" aria-labelledby="visit-title">
+      <div class="wrap visit__inner">
+        <div class="visit__glow" aria-hidden="true"></div>
+        <p class="eyebrow eyebrow--center reveal" data-reveal><span class="eyebrow__dot"></span>방문 · VISIT</p>
+        <h2 class="h2 h2--center reveal" data-reveal id="visit-title">나주에서 굽고,<br /><em>전국으로 보냅니다.</em></h2>
+        <p class="lead lead--center reveal" data-reveal>
+          무료 취향 진단 3문항으로 시작해 보세요. 딱 맞는 첫 원두와 첫 구매 혜택을 보내드립니다.
+        </p>
+
+        <div class="visit__cta reveal" data-reveal>
+          <a class="btn btn--solid btn--lg" href="#">카카오채널 친구 추가</a>
+          <a class="btn btn--ghost btn--lg" href="#beans">원두 둘러보기</a>
+        </div>
+
+        <dl class="visit__info reveal" data-reveal>
+          <div><dt class="mono">매장</dt><dd>전남 나주 · 하이엔드 원두 로스터리</dd></div>
+          <div><dt class="mono">운영</dt><dd>화–일 11:00–20:00 · 월 휴무</dd></div>
+          <div><dt class="mono">문의</dt><dd>네이버 · 카카오채널</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─────────────────────────── FOOTER ─────────────────────────── -->
+  <footer class="foot">
+    <div class="wrap foot__inner">
+      <div class="foot__brand">
+        <a class="brand" href="#top" aria-label="도하커피 홈">
+          <span class="brand__mark" aria-hidden="true"><span class="brand__bean"></span></span>
+          <span class="brand__name">도하커피</span>
+        </a>
+        <p class="foot__slogan mono">커피는 오로지 맛 | 핸드드립</p>
+      </div>
+
+      <nav class="foot__nav" aria-label="푸터 메뉴">
+        <a href="#thesis">단맛</a>
+        <a href="#evidence">근거</a>
+        <a href="#beans">원두</a>
+        <a href="#class">클래스</a>
+        <a href="#visit">방문</a>
+      </nav>
+
+      <div class="foot__social">
+        <a href="#" aria-label="유튜브">YouTube</a>
+        <a href="#" aria-label="카카오채널">Kakao</a>
+        <a href="#" aria-label="인스타그램">Instagram</a>
+      </div>
+    </div>
+    <div class="wrap foot__base mono">
+      <span>© <span data-year>2026</span> 도하커피 DOHA COFFEE</span>
+      <span>감이 아니라 근거로 내리는 커피</span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
