@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>홈카페 핸드드립 백과사전 · 도하커피</title>
+<meta name="description" content="매번 '감'에 기대던 커피를 이제 '원리'로. 도하커피 바리스타 이도하의 핸드드립 마스터 클래스 총 65강.">
+<style>
+  :root{
+    --cream:#FAF5EC;
+    --cream-2:#F3EADB;
+    --paper:#FFFCF7;
+    --espresso:#2C1E14;
+    --coffee:#4A3524;
+    --ink:#3A2A1D;
+    --muted:#7A6653;
+    --line:#E4D8C6;
+    --caramel:#C0803A;
+    --caramel-deep:#A5661F;
+    --gold:#D9A441;
+    --p1:#2E6B8E;   /* PART 1 blue */
+    --p2:#C0803A;   /* PART 2 amber */
+    --p3:#5C7A4A;   /* PART 3 green */
+    --shadow:0 18px 50px -22px rgba(44,30,20,.35);
+    --shadow-sm:0 8px 24px -14px rgba(44,30,20,.3);
+    --radius:18px;
+    --serif:'Nanum Myeongjo','Apple SD Gothic Neo',serif;
+    --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-.01em;
+  }
+  h1,h2,h3{line-height:1.35;letter-spacing:-.02em;margin:0}
+  p{margin:0}
+  a{color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  .em{color:var(--caramel-deep);font-weight:700}
+  .serif{font-family:var(--serif)}
+
+  /* Top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,245,236,.86);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+  .brand{font-family:var(--serif);font-weight:800;font-size:1.05rem;color:var(--espresso);letter-spacing:0}
+  .brand small{display:block;font-family:var(--sans);font-weight:500;font-size:.62rem;letter-spacing:.28em;color:var(--muted);margin-top:1px}
+  .topbar .cta{
+    font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:999px;
+    background:var(--espresso);color:var(--cream);text-decoration:none;white-space:nowrap;
+    transition:transform .15s ease, background .2s ease;
+  }
+  .topbar .cta:hover{background:var(--caramel-deep);transform:translateY(-1px)}
+
+  /* Hero */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(217,164,65,.22), transparent 60%),
+      radial-gradient(90% 70% at 0% 110%, rgba(46,107,142,.10), transparent 55%),
+      linear-gradient(180deg,var(--cream) 0%, var(--cream-2) 100%);
+    padding:78px 0 66px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .steam{font-size:2.4rem;line-height:1;filter:saturate(.9)}
+  .eyebrow{
+    display:inline-block;margin:18px 0 8px;
+    font-size:.72rem;font-weight:700;letter-spacing:.32em;color:var(--caramel-deep);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-family:var(--serif);font-weight:800;color:var(--espresso);
+    font-size:clamp(1.9rem,6.2vw,2.9rem);margin:6px 0 0;
+  }
+  .hero h1 .q{display:block;color:var(--caramel-deep)}
+  .hero .sub{margin:20px auto 0;max-width:560px;color:var(--coffee);font-size:1.02rem}
+  .hero .sub b{color:var(--espresso)}
+  .hero-cta{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+    font-weight:700;text-decoration:none;border-radius:999px;
+    padding:15px 28px;font-size:1rem;transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .btn-primary{background:linear-gradient(180deg,var(--caramel) 0%,var(--caramel-deep) 100%);color:#fff;box-shadow:var(--shadow-sm)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .btn-ghost{background:transparent;color:var(--coffee);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--caramel);color:var(--caramel-deep)}
+  .hero-note{margin-top:16px;font-size:.82rem;color:var(--muted)}
+
+  /* Section rhythm */
+  section{padding:64px 0}
+  .band{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .kicker{
+    display:block;text-align:center;font-size:.72rem;font-weight:700;
+    letter-spacing:.28em;color:var(--caramel-deep);text-transform:uppercase;margin-bottom:12px;
+  }
+  .h-sec{font-family:var(--serif);font-weight:800;color:var(--espresso);text-align:center;font-size:clamp(1.5rem,4.6vw,2rem)}
+  .lead{text-align:center;color:var(--coffee);max-width:600px;margin:16px auto 0}
+
+  .prose p{margin:0 0 1.05em}
+  .prose{color:var(--coffee)}
+  .center{text-align:center}
+
+  .pull{
+    font-family:var(--serif);font-size:clamp(1.25rem,4vw,1.6rem);font-weight:800;
+    color:var(--espresso);text-align:center;line-height:1.5;margin:0 auto;max-width:600px;
+  }
+
+  /* Intro / narrative */
+  .signature{
+    margin-top:26px;text-align:center;font-family:var(--serif);
+    font-size:1.15rem;color:var(--espresso);
+  }
+  .signature small{display:block;font-family:var(--sans);font-size:.78rem;letter-spacing:.24em;color:var(--muted);margin-bottom:4px;font-weight:600}
+
+  /* Sweet Spot card */
+  .sweet{
+    background:linear-gradient(155deg,#3A2718 0%, #26170E 100%);
+    color:#F3E7D6;border-radius:26px;padding:44px 30px;box-shadow:var(--shadow);
+    text-align:center;position:relative;overflow:hidden;
+  }
+  .sweet::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(80% 60% at 70% 0%, rgba(217,164,65,.25), transparent 60%);
+    pointer-events:none;
+  }
+  .sweet .kicker{color:var(--gold)}
+  .sweet h2{font-family:var(--serif);color:#fff;font-size:clamp(1.5rem,4.6vw,2rem)}
+  .sweet p{color:#E4D3BE;margin:14px auto 0;max-width:520px;position:relative}
+  .sweet .hl{color:var(--gold);font-weight:700}
+
+  /* Recommend list */
+  .checks{max-width:640px;margin:22px auto 0;display:grid;gap:12px}
+  .check{
+    display:flex;gap:14px;align-items:flex-start;background:var(--paper);
+    border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm);
+  }
+  .check .ic{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:rgba(192,128,58,.14);color:var(--caramel-deep);display:grid;place-items:center;font-weight:800;font-size:.85rem;margin-top:2px}
+  .check p{color:var(--coffee);font-size:.97rem}
+
+  /* Three pillars */
+  .pillars{display:grid;gap:18px;margin-top:26px}
+  @media(min-width:680px){.pillars{grid-template-columns:repeat(3,1fr)}}
+  .pillar{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;box-shadow:var(--shadow-sm);
+  }
+  .pillar .num{font-size:1.6rem}
+  .pillar h3{font-family:var(--serif);color:var(--espresso);margin:10px 0 8px;font-size:1.12rem}
+  .pillar p{color:var(--muted);font-size:.92rem;line-height:1.7}
+
+  /* Curriculum */
+  .part{
+    border-radius:var(--radius);border:1px solid var(--line);background:var(--paper);
+    box-shadow:var(--shadow-sm);overflow:hidden;margin-top:22px;
+  }
+  .part-head{padding:22px 24px;border-left:6px solid var(--pc,var(--caramel));display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(90deg, color-mix(in srgb, var(--pc) 8%, transparent), transparent)}
+  .part-head h3{font-family:var(--serif);font-size:1.18rem;color:var(--espresso)}
+  .part-head .rng{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+  .part-body{padding:6px 24px 22px}
+  .lesson{padding:16px 0;border-top:1px solid var(--line)}
+  .lesson:first-child{border-top:none}
+  .lesson h4{font-size:.98rem;color:var(--espresso);margin:0 0 5px;font-weight:700}
+  .lesson h4 span{color:var(--pc,var(--caramel-deep));font-family:var(--serif);margin-right:8px}
+  .lesson p{color:var(--muted);font-size:.9rem;line-height:1.65}
+
+  .bean{padding:18px 0;border-top:1px dashed var(--line);display:flex;gap:16px;align-items:flex-start}
+  .bean:first-child{border-top:none}
+  .bean .no{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:rgba(192,128,58,.14);color:var(--caramel-deep);display:grid;place-items:center;font-weight:800;font-family:var(--serif)}
+  .bean h4{font-size:1rem;color:var(--espresso);margin:0 0 2px}
+  .bean .en{font-size:.74rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin:0 0 6px}
+  .bean .rng{font-size:.72rem;font-weight:700;color:var(--caramel-deep);margin:0 0 6px}
+  .bean p{color:var(--muted);font-size:.9rem;line-height:1.65}
+
+  .callout{
+    background:var(--cream-2);border:1px dashed var(--caramel);border-radius:14px;
+    padding:18px 20px;margin:0 0 6px;text-align:center;color:var(--coffee);font-size:.95rem;
+  }
+  .callout b{color:var(--espresso);font-family:var(--serif);font-size:1.05rem}
+
+  /* Special line */
+  .special{display:grid;gap:16px;margin-top:22px}
+  @media(min-width:620px){.special{grid-template-columns:1fr 1fr}}
+  .sp{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+  .sp .tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--caramel-deep);background:rgba(192,128,58,.12);padding:4px 10px;border-radius:999px}
+  .sp h3{font-family:var(--serif);color:var(--espresso);margin:12px 0 6px;font-size:1.15rem}
+  .sp p{color:var(--muted);font-size:.92rem}
+
+  /* Summary table */
+  .tablewrap{overflow-x:auto;margin-top:22px;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  table{border-collapse:collapse;width:100%;min-width:560px;background:var(--paper);font-size:.9rem}
+  th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--espresso);color:var(--cream);font-weight:700;font-size:.82rem;letter-spacing:.02em}
+  tbody tr:last-child td{border-bottom:none;background:var(--cream-2);font-weight:700;color:var(--espresso)}
+  td .cnt{font-family:var(--serif);font-weight:800;color:var(--caramel-deep)}
+
+  /* Offer */
+  .offer{background:linear-gradient(160deg,#3A2718,#241509);color:#F1E4D2}
+  .offer .kicker{color:var(--gold)}
+  .offer .h-sec{color:#fff}
+  .offer .lead{color:#E0CFB9}
+  .ticket{
+    max-width:520px;margin:30px auto 0;background:rgba(255,252,247,.04);
+    border:1px solid rgba(217,164,65,.35);border-radius:22px;padding:30px 26px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
+  }
+  .period{text-align:center;font-family:var(--serif);font-size:1.05rem;color:#fff;margin-bottom:4px}
+  .period small{display:block;font-family:var(--sans);font-size:.8rem;color:#CBB89E;letter-spacing:.02em;margin-top:6px;font-weight:500}
+  .price{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin:22px 0 6px;flex-wrap:wrap}
+  .price .now{font-family:var(--serif);font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1}
+  .price .now small{font-size:.9rem;color:#E0CFB9;font-weight:600;margin-left:2px}
+  .price .old{text-decoration:line-through;color:#A78E72;font-size:1rem}
+  .price-tag{text-align:center;font-size:.82rem;color:#CBB89E;margin-bottom:20px}
+  .price-tag b{color:var(--gold)}
+  .give{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:11px}
+  .give li{display:flex;gap:11px;align-items:flex-start;font-size:.92rem;color:#EAD9C3}
+  .give li::before{content:"☕";flex:0 0 auto}
+  .give.badge li::before{content:"🏅"}
+  .divider{height:1px;background:rgba(217,164,65,.25);margin:22px 0}
+  .divider-label{text-align:center;font-size:.72rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700}
+  .offer .btn-primary{width:100%;margin-top:26px;font-size:1.08rem;padding:17px}
+  .final{text-align:center;margin-top:40px}
+  .final .pull{color:#fff}
+  .final .sig{margin-top:14px;color:#CBB89E;font-family:var(--serif);font-size:1.05rem}
+
+  footer{background:var(--espresso);color:#C9B79E;text-align:center;padding:30px 0;font-size:.82rem}
+  footer .brand{color:var(--cream)}
+
+  /* Mobile sticky CTA */
+  .sticky-cta{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:rgba(44,30,20,.96);backdrop-filter:blur(6px);
+    padding:11px 16px;display:none;align-items:center;justify-content:space-between;gap:12px;
+    border-top:1px solid rgba(217,164,65,.3);
+  }
+  .sticky-cta .p{color:#E9D8C1;font-size:.82rem;line-height:1.35}
+  .sticky-cta .p b{color:var(--gold)}
+  .sticky-cta a{background:var(--caramel);color:#fff;font-weight:700;padding:11px 18px;border-radius:999px;text-decoration:none;font-size:.9rem;white-space:nowrap}
+  @media(max-width:640px){
+    .sticky-cta{display:flex}
+    body{padding-bottom:66px}
+  }
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">도하커피<small>ONLY THE TASTE</small></div>
+    <a class="cta" href="#apply">첫 손님 신청</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="steam">☕</div>
+    <span class="eyebrow">홈카페 핸드드립 백과사전</span>
+    <h1>어제는 분명 맛있었는데,<span class="q">오늘은 왜 그 맛이 안 날까?</span></h1>
+    <p class="sub">같은 원두, 같은 드리퍼, 같은 물을 썼는데도 어떤 날은 고소하고 달고, 어떤 날은 쓰고 밍밍합니다. <b>손재주가 아닙니다. 커피 맛이 달라지는 ‘기준’을 아직 모를 뿐입니다.</b></p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#apply">‘도하의 첫 손님’ 되기 →</a>
+      <a class="btn btn-ghost" href="#curriculum">커리큘럼 먼저 보기</a>
+    </div>
+    <p class="hero-note">총 65강 브루잉 마스터 클래스 · 첫 손님 100명 한정 · 월 9,800원</p>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section>
+  <div class="wrap prose reveal">
+    <span class="kicker">커피는 오로지 맛</span>
+    <h2 class="h-sec">비싼 장비가 아니라, 작은 ‘기준’이 맛을 바꿉니다</h2>
+    <p class="lead">집에서도 카페보다 맛있는 커피를 내릴 수 있도록, 커피 맛을 위한 여정을 공유하는 바리스타 <b>이도하</b>입니다.</p>
+    <div style="height:26px"></div>
+    <p>핸드드립 커피의 맛은 비싼 장비가 결정하지 않습니다. 맛을 좌우하는 건, 누구나 무심코 지나치는 아주 작은 몇 가지 ‘기준’입니다. 이 작은 기준들이 모여 커피 한 잔의 맛을 완전히 바꿉니다.</p>
+    <p><b>[홈카페 핸드드립 백과사전]</b>은 매번 ‘감’에 기대던 커피를, 이제 ‘원리’로 언제든 똑같이 맛있게 내리도록 이끄는 <span class="em">도하커피만의 핸드드립 가이드</span>입니다.</p>
+    <p class="signature"><small>바리스타</small>이 도 하</p>
+  </div>
+</section>
+
+<!-- SWEET SPOT -->
+<section class="band">
+  <div class="wrap reveal">
+    <div class="sweet">
+      <span class="kicker">Doha's Sweet Spot</span>
+      <h2>도하커피만이 살리는 단맛</h2>
+      <p>꽃향, 초콜릿, 견과, 과일의 산미… 원두마다 표정이 다릅니다. 도하커피의 로스팅은 그 개성을 지우지 않고, 본연의 맛 위에 <span class="hl">단맛을 한 겹 더 입히는 중강 로스팅</span>을 지향합니다.</p>
+      <p>원두의 색깔은 살리고, 그 안에 숨은 단맛과 고소함을 자연스럽게 끌어올리는 것 — 이것이 도하커피가 말하는 <span class="hl">Sweet Spot</span>입니다.</p>
+      <p>아무리 잘 볶은 원두라도 내리는 과정에서 그 단맛을 살리지 못하면 커피는 아쉽게 끝납니다. 이 백과사전은 바로 그 <span class="hl">기준과 방법</span>입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RECOMMEND -->
+<section>
+  <div class="wrap reveal">
+    <span class="kicker">For You</span>
+    <h2 class="h-sec">이런 분께 추천합니다</h2>
+    <div class="checks">
+      <div class="check"><span class="ic">✓</span><p>유튜브 레시피를 그대로 따라 했는데, 왜 내 커피만 맛이 다른지 답답했던 분</p></div>
+      <div class="check"><span class="ic">✓</span><p>좋은 원두일수록 오히려 더 자주 실패해서 속상했던 분</p></div>
+      <div class="check"><span class="ic">✓</span><p>어쩌다 완벽했던 ‘그날의 한 잔’을, 매일 아침 다시 만나고 싶은 분</p></div>
+      <div class="check"><span class="ic">✓</span><p>“오늘 커피 왜 이렇게 맛있지?” 그 우연을 실력으로 바꾸고 싶은 분</p></div>
+      <div class="check"><span class="ic">✓</span><p>커피 한 잔이 하루를 여는 나만의 의식이 되길 바라는 분</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="band">
+  <div class="wrap reveal">
+    <span class="kicker">Our Promise</span>
+    <h2 class="h-sec">이 백과사전이 지키는 세 가지</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="num">📍</div>
+        <h3>하나. 장비가 아니라 기준</h3>
+        <p>처음부터 비싼 장비는 필요 없습니다. 물은 얼마나, 왜 가운데 가까이, 왜 뜸 들이기가 중요한지 — 오늘 바로 내리는 맛의 기준을 쉽게 풀었습니다.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">🤲</div>
+        <h3>둘. 문턱을 낮췄습니다</h3>
+        <p>8년간 800명 넘는 분들을 가르치며 확인한 것 — 초보자도 기준만 잡으면 맛이 완전히 달라진다는 것. 복잡한 설명 대신 실제로 맛이 바뀌는 지점에 집중했습니다.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">🏆</div>
+        <h3>셋. 이해하고 응용하게</h3>
+        <p>단순히 레시피만 따라 하는 강의가 아닙니다. <b>왜 그렇게 내려야 맛있는지</b>를 이해해, 원두가 바뀌어도 용량이 바뀌어도 스스로 맛을 조절하게 됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <div class="wrap reveal">
+    <span class="kicker">Full Curriculum</span>
+    <h2 class="h-sec">총 65강, 브루잉 커피 마스터 클래스</h2>
+    <p class="lead">감으로 내리던 커피를 원리로 이해하는 홈카페 완성 과정.</p>
+
+    <!-- PART 1 -->
+    <div class="part" style="--pc:var(--p1)">
+      <div class="part-head"><h3>🟦 PART 1. 기초 이론</h3><span class="rng">Video 0001 ~ 0005 · 5강</span></div>
+      <div class="part-body">
+        <div class="lesson"><h4><span>0001</span>당신의 커피 맛을 결정짓는 6대 변수</h4><p>로스팅·분쇄도·추출 시간·물 온도·물줄기·드리퍼가 어떻게 맞물려 맛을 바꾸는지 짚어드립니다.</p></div>
+        <div class="lesson"><h4><span>0002</span>커피 맛이 추출되는 순서의 비밀</h4><p>신맛·단맛·쓴맛이 어떤 순서로 나오고, 그 흐름을 어떻게 다뤄야 하는지 배웁니다.</p></div>
+        <div class="lesson"><h4><span>0003</span>초반 추출의 중요성</h4><p>뜸 들이기는 단순히 기다리는 시간이 아닙니다. 원두를 깨우고 이후 방향을 결정하는 핵심 단계입니다.</p></div>
+        <div class="lesson"><h4><span>0004</span>커피 분말을 건드리지 않는 물줄기</h4><p>쓴맛은 대부분 물줄기에서 시작됩니다. 분말을 흔들지 않고 고소함과 단맛을 끌어내는 기준을 잡아드립니다.</p></div>
+        <div class="lesson"><h4><span>0005</span>물 희석량에 따른 맛의 변화</h4><p>바디감과 밸런스를 내 취향에 맞게 조절하는 농도 가이드입니다.</p></div>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="part" style="--pc:var(--p2)">
+      <div class="part-head"><h3>🟧 PART 2. 원두 5종 · 용량별 레시피</h3><span class="rng">Video 0006 ~ 0060 · 55강</span></div>
+      <div class="part-body">
+        <div class="callout"><b>“오늘 저울 위 원두가 몇 g인가요? 그 숫자만 확인하세요.”</b><br>원두마다 10g~60g을 5g 단위로 쪼갠 총 55편. 집에서 가장 쉬운 <b>웨지형 드리퍼</b> 기준.</div>
+        <div class="bean"><span class="no">1</span><div><h4>콜롬비아 후일라 슈프리모</h4><p class="en">Colombia Huila Supremo</p><p class="rng">Video 0006 ~ 0016</p><p>누구에게 내어도 부담 없는 마일드 커피의 정석. 균형 잡힌 바디와 깔끔한 견과류의 고소함을 살립니다.</p></div></div>
+        <div class="bean"><span class="no">2</span><div><h4>과테말라 안티구아 SHB</h4><p class="en">Guatemala Antigua SHB</p><p class="rng">Video 0017 ~ 0027</p><p>스모키한 첫인상 뒤 초콜릿 같은 달콤쌉싸름함. 강한 인상은 부드럽게, 묵직한 단맛은 더 선명하게.</p></div></div>
+        <div class="bean"><span class="no">3</span><div><h4>에티오피아 예가체프 G1</h4><p class="en">Ethiopia Yirgacheffe G1</p><p class="rng">Video 0028 ~ 0038</p><p>먼저 느껴지는 꽃향, 뒤이어 과일의 산미. 떫은맛 없이 투명하게, 향은 살리고 날카로움은 줄입니다.</p></div></div>
+        <div class="bean"><span class="no">4</span><div><h4>탄자니아 킬리만자로 AA</h4><p class="en">Tanzania Kilimanjaro AA</p><p class="rng">Video 0039 ~ 0049</p><p>묵직한 바디 위에서 고소함과 단맛이 만나는 지점. Sweet Spot을 가장 분명하게 경험하는 레시피.</p></div></div>
+        <div class="bean"><span class="no">5</span><div><h4>디카페인 콜롬비아 후일라 슈프리모</h4><p class="en">Decaf Colombia Huila Supremo</p><p class="rng">Video 0050 ~ 0060</p><p>카페인 부담 없이. 디카페인 특유의 떫은맛은 줄이고 부드러운 단맛과 편안한 질감으로 채웠습니다.</p></div></div>
+      </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="part" style="--pc:var(--p3)">
+      <div class="part-head"><h3>🟩 PART 3. 홈카페 외전 · 도구를 다루는 즐거움</h3><span class="rng">Video 0061 ~ 0065 · 5강</span></div>
+      <div class="part-body">
+        <div class="lesson"><h4><span>0061</span>선물 받은 드립백, 카페 맛 그대로</h4><p>가볍게 마시는 드립백도 물 붓는 방식만 알면 훨씬 맛있어집니다.</p></div>
+        <div class="lesson"><h4><span>0062</span>집에서 즐기는 깊고 진한 더치커피</h4><p>과추출 없이 깔끔하고 깊은 맛을 만드는 홈 브루잉 더치커피 가이드.</p></div>
+        <div class="lesson"><h4><span>0063</span>이탈리아 감성 그대로, 모카포트 완벽 활용</h4><p>불 조절로 진한 바디감의 커피를 안정적으로 추출하는 법을 다룹니다.</p></div>
+        <div class="lesson"><h4><span>0064</span>자동 드리퍼로도 전문가의 손맛을</h4><p>자동으로 내려오는 커피도 변수를 이해하면 맛을 조절할 수 있습니다.</p></div>
+        <div class="lesson"><h4><span>0065</span>프렌치프레스로 만드는 쫀쫀한 우유 거품</h4><p>에스프레소 머신 없이도 벨벳 같은 우유 거품을 만드는 홈카페 라떼 레시피.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIAL LINE -->
+<section class="band">
+  <div class="wrap reveal">
+    <span class="kicker">Coming Next</span>
+    <h2 class="h-sec">이후 더해질 스페셜 라인</h2>
+    <p class="lead">기본 65강을 마친 뒤, 커피의 폭을 넓혀줄 콘텐츠가 순차적으로 추가됩니다.</p>
+    <div class="special">
+      <div class="sp"><span class="tag">Specialty · 격주</span><h3>이주의 커피</h3><p>독특한 가공 방식과 개성을 가진 스페셜티 원두를 맛있게 다루는 방법.</p></div>
+      <div class="sp"><span class="tag">High-End · 매달</span><h3>이달의 커피</h3><p>하이엔드 원두의 섬세한 향미의 층을 집에서도 제대로 깨우는 방법.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY TABLE -->
+<section>
+  <div class="wrap reveal">
+    <span class="kicker">At a Glance</span>
+    <h2 class="h-sec">한눈에 보는 커리큘럼</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>파트</th><th>강의 범위</th><th>핵심 내용</th><th>강의 수</th></tr></thead>
+        <tbody>
+          <tr><td>🟦 PART 1</td><td>0001~0005</td><td>맛을 바꾸는 핵심 변수와 기초 원리</td><td><span class="cnt">5강</span></td></tr>
+          <tr><td>🟧 PART 2</td><td>0006~0060</td><td>기본 원두 5종 × 용량별 10g~60g 맞춤 가이드</td><td><span class="cnt">55강</span></td></tr>
+          <tr><td>🟩 PART 3</td><td>0061~0065</td><td>드립백·더치·모카포트·자동 드리퍼·프렌치프레스</td><td><span class="cnt">5강</span></td></tr>
+          <tr><td>🔥 총계</td><td>0001~0065</td><td>감으로 내리던 커피를 원리로 이해하는 완성 과정</td><td><span class="cnt">총 65강</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pull" style="margin-top:40px">비싼 장비보다 중요한 건, <span class="em">맛의 기준</span>입니다.<br>오늘부터, 당신의 홈카페가 달라집니다.</p>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section class="offer" id="apply">
+  <div class="wrap reveal">
+    <span class="kicker">The First Guests</span>
+    <h2 class="h-sec">지금, ‘도하의 첫 손님’을 모십니다</h2>
+    <p class="lead">이 백과사전을 가장 먼저 함께할 <b style="color:var(--gold)">‘도하의 첫 손님’ 100명</b>을 모집합니다.</p>
+
+    <div class="ticket">
+      <div class="period">모집 · 9월 3일(목) ~ 9월 13일(일) 밤 12시<small>선착순 100명 또는 마감일 — 둘 중 먼저 도달하면 마감</small></div>
+
+      <div class="price">
+        <div><div class="now">9,800<small>원 / 월</small></div></div>
+        <div class="old">정식가 14,900원</div>
+      </div>
+      <p class="price-tag">매달 5,100원, 1년이면 6만 원 넘게 차이 — <b>지금이, 가장 쌉니다.</b></p>
+
+      <div class="divider"></div>
+      <div class="divider-label">무엇을 받나요</div>
+      <ul class="give">
+        <li>본편 <b style="color:#fff">65강 상시 열람</b> (기초 5강 + 원두 55강 + 도구 5강)</li>
+        <li>새로 올라오는 스페셜 — 이주의 커피(격주)·이달의 커피(매달)</li>
+      </ul>
+
+      <div class="divider"></div>
+      <div class="divider-label">첫 손님 100명에게만</div>
+      <ul class="give badge">
+        <li>‘도하의 첫 손님’ 전용 배지</li>
+        <li>새 스페셜 원두를 가장 먼저 만나는 우선권</li>
+        <li>전용 카카오톡방 — 오늘 내린 한 잔을 나누고, 막히는 건 물어보세요. 일주일에 두 번 도하가 직접 답합니다.</li>
+      </ul>
+
+      <a class="btn btn-primary" href="#" onclick="return false;">👉 지금 ‘도하의 첫 손님’으로 신청하기</a>
+      <p style="text-align:center;font-size:.75rem;color:#A78E72;margin-top:12px">▶ 가입 링크는 준비 중입니다</p>
+    </div>
+
+    <div class="final">
+      <p class="pull">커피는 오로지 맛.<br>오늘의 인생 커피, 이제 우연이 아니라 실력으로.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand serif" style="font-weight:800;font-size:1.05rem">도하커피</div>
+    <p style="margin-top:6px">커피는 오로지 맛 · 바리스타 이도하</p>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <div class="p">첫 손님 특가 <b>월 9,800원</b> · 100명 한정</div>
+  <a href="#apply">신청하기</a>
+</div>
+
+<script>
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+</script>
+</body>
+</html>
