@@ -74,7 +74,30 @@
   /* ---- spectrum marker ---- */
   function fillSpectrum(el) {
     var marker = el.querySelector('[data-spectrum-marker]');
-    if (marker) marker.style.left = reduce ? '82%' : '82%';
+    if (marker) marker.style.left = '82%';
+  }
+
+  /* ---- calendar bars ---- */
+  function litCal(el) { el.classList.add('is-lit'); }
+
+  /* ---- flavor filter ---- */
+  var filters = document.querySelectorAll('.filter');
+  var products = document.querySelectorAll('[data-products] .product');
+  if (filters.length && products.length) {
+    filters.forEach(function (f) {
+      f.addEventListener('click', function () {
+        var key = f.getAttribute('data-f');
+        filters.forEach(function (x) {
+          var on = x === f;
+          x.classList.toggle('is-active', on);
+          x.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        products.forEach(function (p) {
+          var show = key === 'all' || p.getAttribute('data-flavor') === key;
+          p.classList.toggle('is-hidden', !show);
+        });
+      });
+    });
   }
 
   /* ---- signature curve ---- */
@@ -100,6 +123,7 @@
     document.querySelectorAll('[data-count]').forEach(countUp);
     document.querySelectorAll('.roast').forEach(litRoast);
     document.querySelectorAll('[data-spectrum]').forEach(fillSpectrum);
+    document.querySelectorAll('[data-cal]').forEach(litCal);
     drawCurve();
     return;
   }
@@ -117,6 +141,7 @@
         if (sp) fillSpectrum(sp);
       }
       if (el.classList.contains('curve')) drawCurve();
+      if (el.matches('[data-cal]')) litCal(el);
 
       io.unobserve(el);
     });
