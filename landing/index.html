@@ -211,13 +211,26 @@
   .sp h3{font-family:var(--serif);color:var(--espresso);margin:14px 0 8px;font-size:1.18rem;line-height:1.4}
   .sp p{color:var(--coffee);font-size:.98rem;line-height:1.75}
 
-  /* Summary table */
-  .tablewrap{overflow-x:auto;margin-top:30px;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
-  table{border-collapse:collapse;width:100%;min-width:560px;background:var(--paper);font-size:.95rem}
-  th,td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
-  thead th{background:var(--espresso);color:var(--cream);font-weight:700;font-size:.86rem;letter-spacing:.02em}
-  tbody tr:last-child td{border-bottom:none;background:var(--cream-2);font-weight:700;color:var(--espresso)}
-  td .cnt{font-family:var(--serif);font-weight:800;color:var(--caramel-deep)}
+  /* Summary — responsive card rows (no horizontal scroll on mobile) */
+  .curr{display:flex;flex-direction:column;gap:12px;margin-top:30px}
+  .curr-row{
+    display:grid;grid-template-columns:minmax(104px,auto) 1fr auto;gap:18px;align-items:center;
+    background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--pc,var(--caramel));
+    border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm);
+  }
+  .curr-part{display:flex;flex-direction:column;gap:3px}
+  .curr-badge{font-weight:800;font-size:.98rem;color:var(--espresso)}
+  .curr-rng{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+  .curr-desc{color:var(--coffee);font-size:.97rem;line-height:1.6}
+  .curr-cnt{font-family:var(--serif);font-weight:800;color:var(--caramel-deep);font-size:1.15rem;white-space:nowrap}
+  .curr-total{background:var(--cream-2);border-left-color:var(--caramel-deep)}
+  .curr-total .curr-badge,.curr-total .curr-desc{color:var(--espresso);font-weight:700}
+  @media(max-width:560px){
+    .curr-row{grid-template-columns:1fr auto;grid-template-areas:"part cnt" "desc desc";row-gap:10px;gap:12px}
+    .curr-part{grid-area:part}
+    .curr-cnt{grid-area:cnt;align-self:center}
+    .curr-desc{grid-area:desc;padding-top:2px;border-top:1px solid var(--line)}
+  }
 
   /* Offer */
   .offer{background:linear-gradient(160deg,#3A2718,#241509);color:#F1E4D2}
@@ -483,16 +496,27 @@
   <div class="wrap reveal">
     <span class="kicker">At a Glance</span>
     <h2 class="h-sec">한눈에 보는 커리큘럼</h2>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>파트</th><th>강의 범위</th><th>핵심 내용</th><th>강의 수</th></tr></thead>
-        <tbody>
-          <tr><td>🟦 PART 1</td><td>0001~0005</td><td>맛을 바꾸는 핵심 변수와 기초 원리</td><td><span class="cnt">5강</span></td></tr>
-          <tr><td>🟧 PART 2</td><td>0006~0060</td><td>기본 원두 5종 × 용량별 10g~60g 맞춤 가이드</td><td><span class="cnt">55강</span></td></tr>
-          <tr><td>🟩 PART 3</td><td>0061~0065</td><td>드립백·더치·모카포트·자동 드리퍼·프렌치프레스</td><td><span class="cnt">5강</span></td></tr>
-          <tr><td>🔥 총계</td><td>0001~0065</td><td>감으로 내리던 커피를 원리로 이해하는 완성 과정</td><td><span class="cnt">총 65강</span></td></tr>
-        </tbody>
-      </table>
+    <div class="curr">
+      <div class="curr-row" style="--pc:var(--p1)">
+        <div class="curr-part"><span class="curr-badge">🟦 PART 1</span><span class="curr-rng">Video 0001~0005</span></div>
+        <div class="curr-desc">맛을 바꾸는 핵심 변수와 기초 원리</div>
+        <div class="curr-cnt">5강</div>
+      </div>
+      <div class="curr-row" style="--pc:var(--p2)">
+        <div class="curr-part"><span class="curr-badge">🟧 PART 2</span><span class="curr-rng">Video 0006~0060</span></div>
+        <div class="curr-desc">기본 원두 5종 × 용량별 10g~60g 맞춤 가이드</div>
+        <div class="curr-cnt">55강</div>
+      </div>
+      <div class="curr-row" style="--pc:var(--p3)">
+        <div class="curr-part"><span class="curr-badge">🟩 PART 3</span><span class="curr-rng">Video 0061~0065</span></div>
+        <div class="curr-desc">드립백·더치·모카포트·자동 드리퍼·프렌치프레스</div>
+        <div class="curr-cnt">5강</div>
+      </div>
+      <div class="curr-row curr-total">
+        <div class="curr-part"><span class="curr-badge">🔥 총계</span><span class="curr-rng">Video 0001~0065</span></div>
+        <div class="curr-desc">감으로 내리던 커피를 원리로 이해하는 완성 과정</div>
+        <div class="curr-cnt">총 65강</div>
+      </div>
     </div>
     <p class="pull" style="margin-top:44px">비싼 장비보다 중요한 건, <span class="em">맛의 기준</span>입니다.<br><br>오늘부터, 당신의 홈카페가 달라집니다.</p>
   </div>
@@ -528,7 +552,8 @@
       <ul class="give badge">
         <li>‘도하의 첫 손님’ 전용 배지</li>
         <li>새 스페셜 원두를 가장 먼저 만나는 우선권</li>
-        <li>전용 카카오톡방<br>오늘 내린 한 잔을 나누고, 막히는 건 물어보세요.<br>일주일에 두 번, 도하가 직접 답합니다.</li>
+        <li>전용 카카오톡 ‘사랑방’<br>오늘 내린 한 잔을 나누고,<br>서로 위로가 되는 첫 손님들의 공간.</li>
+        <li>‘월요 모닝 라이브’ 상시 다시보기<br>매주 월요일 아침 라이브를<br>일부공개 링크로 언제든 다시 볼 수 있습니다.</li>
       </ul>
 
       <a class="btn btn-primary" href="#" onclick="return false;">👉 지금 ‘도하의 첫 손님’으로 신청하기</a>
