@@ -163,16 +163,22 @@
   .check .ic{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:rgba(192,128,58,.14);color:var(--caramel-deep);display:grid;place-items:center;font-weight:800;font-size:.9rem;margin-top:3px}
   .check p{color:var(--coffee);font-size:1.02rem;line-height:1.7}
 
-  /* Three pillars */
-  .pillars{display:grid;gap:20px;margin-top:30px}
-  @media(min-width:700px){.pillars{grid-template-columns:repeat(3,1fr)}}
+  /* Three pillars — stacked horizontal cards for full-width readable copy */
+  .pillars{display:flex;flex-direction:column;gap:16px;margin-top:30px}
   .pillar{
-    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
-    padding:28px 24px;box-shadow:var(--shadow-sm);
+    display:grid;grid-template-columns:150px 1fr;gap:24px;align-items:start;
+    background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--caramel);
+    border-radius:var(--radius);padding:26px 26px;box-shadow:var(--shadow-sm);
   }
-  .pillar .num{font-size:1.7rem}
-  .pillar h3{font-family:var(--serif);color:var(--espresso);margin:12px 0 12px;font-size:1.18rem;line-height:1.4}
-  .pillar .copy p{color:var(--coffee);font-size:.98rem;line-height:1.75}
+  .pillar .p-head{display:flex;flex-direction:column;gap:8px}
+  .pillar .num{font-size:1.9rem;line-height:1}
+  .pillar h3{font-family:var(--serif);color:var(--espresso);font-size:1.16rem;line-height:1.45}
+  .pillar .copy{gap:.7em}
+  .pillar .copy p{color:var(--coffee);font-size:1.02rem;line-height:1.8}
+  @media(max-width:560px){
+    .pillar{grid-template-columns:1fr;gap:14px;padding:24px 22px}
+    .pillar .p-head{flex-direction:row;align-items:center;gap:12px}
+  }
 
   /* Curriculum */
   .part{
@@ -387,30 +393,27 @@
     <h2 class="h-sec">이 백과사전이 지키는 세 가지</h2>
     <div class="pillars">
       <div class="pillar">
-        <div class="num">📍</div>
-        <h3>하나.<br>장비가 아니라 기준</h3>
-        <div class="copy tight">
+        <div class="p-head"><div class="num">📍</div><h3>하나.<br>장비가 아니라 기준</h3></div>
+        <div class="copy">
           <p>처음부터 비싼 장비는 필요 없습니다.</p>
-          <p>물은 얼마나, 왜 가운데 가까이,<br>왜 뜸 들이기가 중요한지.</p>
-          <p>오늘 바로 내리는 맛의 기준을<br>쉽게 풀었습니다.</p>
+          <p>물은 얼마나, 왜 가운데 가까이, 왜 뜸 들이기가 중요한지.</p>
+          <p>오늘 바로 내리는 맛의 기준을 쉽게 풀었습니다.</p>
         </div>
       </div>
       <div class="pillar">
-        <div class="num">🤲</div>
-        <h3>둘.<br>문턱을 낮췄습니다</h3>
-        <div class="copy tight">
-          <p>수년간 수백 명이 넘는 분들을<br>가르치며 확인한 것.</p>
-          <p>초보자도 기준만 잡으면<br>맛이 완전히 달라진다는 것.</p>
-          <p>실제로 맛이 바뀌는 지점에<br>집중했습니다.</p>
+        <div class="p-head"><div class="num">🤲</div><h3>둘.<br>문턱을 낮췄습니다</h3></div>
+        <div class="copy">
+          <p>수년간 수백 명이 넘는 분들을 가르치며 확인한 것.</p>
+          <p>초보자도 기준만 잡으면 맛이 완전히 달라진다는 것.</p>
+          <p>실제로 맛이 바뀌는 지점에 집중했습니다.</p>
         </div>
       </div>
       <div class="pillar">
-        <div class="num">🏆</div>
-        <h3>셋.<br>이해하고 응용하게</h3>
-        <div class="copy tight">
+        <div class="p-head"><div class="num">🏆</div><h3>셋.<br>이해하고 응용하게</h3></div>
+        <div class="copy">
           <p>레시피만 따라 하는 강의가 아닙니다.</p>
-          <p><b>왜 그렇게 내려야 맛있는지</b>를<br>이해하도록.</p>
-          <p>원두·용량이 바뀌어도<br>스스로 맛을 조절하게 됩니다.</p>
+          <p><b>왜 그렇게 내려야 맛있는지</b>를 이해하도록.</p>
+          <p>원두·용량이 바뀌어도 스스로 맛을 조절하게 됩니다.</p>
         </div>
       </div>
     </div>
