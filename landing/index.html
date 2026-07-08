@@ -237,6 +237,13 @@
   .price .old{text-decoration:line-through;color:#A78E72;font-size:1.05rem}
   .price-tag{text-align:center;font-size:.88rem;color:#CBB89E;margin-bottom:22px;line-height:1.7}
   .price-tag b{color:var(--gold)}
+  .lockin{
+    margin:0 0 22px;padding:13px 16px;border-radius:12px;text-align:center;line-height:1.65;
+    background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.4);
+    color:#F1E4D2;font-size:.92rem;
+  }
+  .lockin b{color:var(--gold)}
+  .lockin .sm{display:block;margin-top:3px;font-size:.8rem;color:#CBB89E}
   .give{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:14px}
   .give li{display:flex;gap:12px;align-items:flex-start;font-size:.98rem;color:#EAD9C3;line-height:1.7}
   .give li::before{content:"☕";flex:0 0 auto}
@@ -297,7 +304,7 @@
       <a class="btn btn-primary" href="#apply">‘도하의 첫 손님’ 되기 →</a>
       <a class="btn btn-ghost" href="#curriculum">커리큘럼 먼저 보기</a>
     </div>
-    <p class="hero-note">총 65강 브루잉 마스터 클래스 · 첫 손님 100명 한정 · 월 9,800원</p>
+    <p class="hero-note">총 65강 브루잉 마스터 클래스 · 첫 손님 100명 한정<br>월 9,800원 — 첫 손님은 인상 없이 계속 고정가</p>
   </div>
 </header>
 
@@ -507,6 +514,8 @@
       </div>
       <p class="price-tag">매달 5,100원, 1년이면 6만 원 넘게 차이.<br><b>지금이, 가장 쌉니다.</b></p>
 
+      <div class="lockin">한 번 <b>첫 손님</b>이면, 인상 없이 계속 <b>월 9,800원</b>.<span class="sm">구독을 유지하는 한 요금 인상 없는 평생 고정가입니다.</span></div>
+
       <div class="divider"></div>
       <div class="divider-label">무엇을 받나요</div>
       <ul class="give">
@@ -540,7 +549,7 @@
 </footer>
 
 <div class="sticky-cta">
-  <div class="p">첫 손님 특가 <b>월 9,800원</b> · 100명 한정</div>
+  <div class="p">첫 손님 <b>월 9,800원 고정</b> · 100명 한정</div>
   <a href="#apply">신청하기</a>
 </div>
 
