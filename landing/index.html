@@ -275,8 +275,18 @@
   .final{text-align:center;margin-top:44px}
   .final .pull{color:#fff}
 
-  footer{background:var(--espresso);color:#C9B79E;text-align:center;padding:34px 0;font-size:.88rem;line-height:1.8}
+  footer{background:var(--espresso);color:#C9B79E;text-align:center;padding:36px 0;font-size:.88rem;line-height:1.8}
   footer .brand{color:var(--cream)}
+  .social{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+  .social a{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:10px 17px;border-radius:999px;font-size:.86rem;font-weight:600;
+    color:var(--cream);text-decoration:none;
+    background:rgba(255,252,247,.06);border:1px solid rgba(217,164,65,.3);
+    transition:background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .social a:hover{background:rgba(217,164,65,.16);border-color:var(--gold);transform:translateY(-1px)}
+  .social a .i{font-size:.95rem}
 
   /* Mobile sticky CTA */
   .sticky-cta{
@@ -574,6 +584,12 @@
   <div class="wrap">
     <div class="brand serif" style="font-weight:800;font-size:1.1rem">도하커피</div>
     <p style="margin-top:8px">커피는 오로지 맛 · 바리스타 이도하</p>
+    <nav class="social" aria-label="도하커피 채널">
+      <a href="#" target="_blank" rel="noopener"><span class="i">▶</span> 유튜브</a>
+      <a href="#" target="_blank" rel="noopener"><span class="i">📷</span> 인스타그램</a>
+      <a href="#" target="_blank" rel="noopener"><span class="i">✍</span> 블로그</a>
+      <a href="#" target="_blank" rel="noopener"><span class="i">📍</span> 오프라인 매장</a>
+    </nav>
   </div>
 </footer>
 
