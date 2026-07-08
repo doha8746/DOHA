@@ -439,6 +439,15 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 .origin__foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; padding-top: 0.9rem; border-top: 1px dashed var(--line); }
 .origin__price { font-family: var(--mono); font-weight: 600; font-size: 0.92rem; color: var(--ink); white-space: nowrap; }
 .origin__price small { font-weight: 400; color: var(--ink-dim); font-size: 0.6rem; }
+.qr-row { display: flex; justify-content: center; gap: 0.7rem; padding: 1rem 1.2rem 0.5rem; }
+.qr-item { display: flex; flex-direction: column; align-items: center; gap: 0.34rem; }
+.qr { width: 42px; height: 42px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+.qr svg { display: block; width: 100%; height: 100%; }
+.qr--store { color: #06A94D; }
+.qr--kakao { color: #5A4A12; }
+.qr--guide { color: #8A4F1E; }
+.qr-cap { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.02em; color: var(--ink-dim); }
+
 .origin__stamp { padding: 0.6rem; text-align: center; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); background: var(--card-2); border-top: 1px solid var(--line-soft); }
 
 /* ============================================================
