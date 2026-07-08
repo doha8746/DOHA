@@ -1,1 +1,5 @@
 .claude/settings.local.json
+
+# Python bytecode caches
+__pycache__/
+*.pyc
