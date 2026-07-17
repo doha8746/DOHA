@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>도하커피 · 랜딩페이지 디자인 가이드</title>
+<style>
+  :root{
+    --paper:#f2f1ea; --cream:#fbfaf6; --card:#ffffff;
+    --ink:#2e2e29; --muted:#6f7368; --faint:#9a9c90;
+    --grey:#333333; --khaki:#556b2f; --khaki-2:#44571f;
+    --sage:#9caf88; --tint:#e8ede0;
+    --dark:#2a2a2a; --dark-2:#232321;
+    --line:rgba(51,51,51,.14); --line-soft:rgba(51,51,51,.08);
+    --code:#eeede6;
+    --shadow:0 1px 2px rgba(51,51,51,.04),0 8px 30px rgba(51,51,51,.06);
+    --sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Malgun Gothic','Segoe UI',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#1a1b18; --cream:#212219; --card:#24261d;
+      --ink:#ecebe0; --muted:#a7a99b; --faint:#7c7e70;
+      --grey:#ecebe0; --khaki:#9bb85f; --khaki-2:#b6cd82;
+      --sage:#9caf88; --tint:#2c3122;
+      --dark:#111310; --dark-2:#0d0e0b;
+      --line:rgba(236,235,224,.15); --line-soft:rgba(236,235,224,.08);
+      --code:#1b1c17;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#f2f1ea; --cream:#fbfaf6; --card:#ffffff;
+    --ink:#2e2e29; --muted:#6f7368; --faint:#9a9c90;
+    --grey:#333333; --khaki:#556b2f; --khaki-2:#44571f; --sage:#9caf88; --tint:#e8ede0;
+    --dark:#2a2a2a; --dark-2:#232321;
+    --line:rgba(51,51,51,.14); --line-soft:rgba(51,51,51,.08); --code:#eeede6;
+    --shadow:0 1px 2px rgba(51,51,51,.04),0 8px 30px rgba(51,51,51,.06);
+  }
+  :root[data-theme="dark"]{
+    --paper:#1a1b18; --cream:#212219; --card:#24261d;
+    --ink:#ecebe0; --muted:#a7a99b; --faint:#7c7e70;
+    --grey:#ecebe0; --khaki:#9bb85f; --khaki-2:#b6cd82; --sage:#9caf88; --tint:#2c3122;
+    --dark:#111310; --dark-2:#0d0e0b;
+    --line:rgba(236,235,224,.15); --line-soft:rgba(236,235,224,.08); --code:#1b1c17;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  ::selection{background:var(--khaki);color:#fff}
+
+  /* 상단바 */
+  .topnav{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft)}
+  .topnav-in{max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .tn-brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .tn-brand .lm{width:26px;height:29px;color:var(--grey)}
+  .tn-brand small{display:block;font-size:9px;letter-spacing:.18em;color:var(--khaki);font-weight:700}
+  .tn-brand b{font-size:15px;letter-spacing:.01em}
+  .tn-right{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--muted)}
+  .themebtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .themebtn:hover{border-color:var(--khaki);color:var(--khaki)}
+
+  /* 레이아웃 */
+  .shell{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:230px 1fr;gap:48px;align-items:start}
+  .toc{position:sticky;top:84px;align-self:start;padding:8px 0;font-size:13.5px}
+  .toc .t{font-size:11px;letter-spacing:.16em;color:var(--faint);font-weight:700;margin:0 0 12px}
+  .toc a{display:block;color:var(--muted);padding:6px 12px;border-left:2px solid var(--line-soft);text-decoration:none;transition:.15s}
+  .toc a:hover{color:var(--khaki);border-left-color:var(--khaki)}
+  .toc a b{color:var(--faint);font-variant-numeric:tabular-nums;margin-right:8px;font-weight:700}
+  .content{min-width:0;padding-bottom:120px}
+  @media(max-width:880px){.shell{grid-template-columns:1fr;gap:0}.toc{display:none}}
+
+  /* 커버 */
+  .cover{padding:64px 0 40px;border-bottom:1px solid var(--line-soft);margin-bottom:12px}
+  .kicker{color:var(--khaki);font-weight:700;letter-spacing:.2em;font-size:12px;margin-bottom:18px}
+  .cover h1{font-size:clamp(30px,5vw,50px);line-height:1.12;letter-spacing:-.03em;font-weight:900;text-wrap:balance;margin-bottom:18px}
+  .cover .lead{font-size:17px;color:var(--muted);max-width:60ch}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .cover .meta span{font-size:12px;font-weight:600;color:var(--khaki);background:var(--tint);border:1px solid var(--line-soft);padding:6px 12px;border-radius:999px}
+
+  /* 섹션 */
+  section.doc{padding:52px 0;border-top:1px solid var(--line-soft)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .sec-no{font-size:13px;font-weight:800;color:var(--khaki);font-variant-numeric:tabular-nums;letter-spacing:.05em}
+  .sec-head h2{font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;font-weight:800}
+  .sec-sub{color:var(--muted);font-size:15px;margin:0 0 30px;max-width:66ch}
+  h3.blk{font-size:13px;letter-spacing:.05em;font-weight:800;color:var(--ink);margin:34px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+  .card{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+  .card h4{font-size:15px;font-weight:800;margin-bottom:6px}
+  .card p{font-size:13.5px;color:var(--muted)}
+  .lead-word{color:var(--khaki);font-weight:700}
+
+  /* 파운데이션 리스트 */
+  .deflist{display:grid;grid-template-columns:130px 1fr;gap:12px 20px;font-size:14.5px}
+  .deflist dt{font-weight:700;color:var(--khaki)}
+  .deflist dd{color:var(--ink)}
+  .quote{border-left:3px solid var(--khaki);padding:6px 0 6px 18px;font-size:17px;font-weight:600;color:var(--ink);margin:8px 0 4px}
+  .axis3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+  @media(max-width:680px){.axis3{grid-template-columns:1fr}}
+  .axis3 .a{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:20px}
+  .axis3 .a .n{font-size:26px;font-weight:900;color:var(--tint);letter-spacing:-.04em;line-height:1}
+  .axis3 .a h5{font-size:16px;font-weight:800;margin:8px 0 6px}
+  .axis3 .a h5 span{color:var(--khaki)}
+  .axis3 .a p{font-size:13px;color:var(--muted)}
+
+  /* 컬러 스와치 */
+  .sw{border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;background:var(--card)}
+  .sw .chip{height:120px}
+  .sw .info{padding:14px 16px}
+  .sw .info .nm{font-weight:800;font-size:14px}
+  .sw .info .en{font-size:11.5px;color:var(--faint);font-weight:600;letter-spacing:.04em;margin-bottom:8px}
+  .sw .info code{display:block;font-size:12px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.7}
+  .role{display:inline-block;font-size:11px;font-weight:700;color:var(--khaki);background:var(--tint);border-radius:999px;padding:3px 9px;margin-top:10px}
+  .tokrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+  .tok{display:flex;align-items:center;gap:9px;border:1px solid var(--line-soft);border-radius:10px;padding:8px 12px;background:var(--card);font-size:12.5px}
+  .tok i{width:20px;height:20px;border-radius:6px;border:1px solid var(--line-soft);display:block}
+  .tok code{font-family:ui-monospace,Menlo,monospace;color:var(--muted);font-size:11.5px}
+  .usage{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  @media(max-width:680px){.usage{grid-template-columns:1fr}}
+  .usage .do,.usage .dont{border-radius:12px;padding:16px 18px;font-size:13.5px;border:1px solid var(--line-soft)}
+  .usage .do{background:color-mix(in srgb,var(--sage) 16%,var(--card))}
+  .usage .dont{background:color-mix(in srgb,#c25b4a 10%,var(--card))}
+  .usage h6{font-size:12px;font-weight:800;letter-spacing:.04em;margin-bottom:10px;display:flex;gap:6px;align-items:center}
+  .usage ul{list-style:none;display:grid;gap:7px}
+  .usage li{padding-left:16px;position:relative;color:var(--ink)}
+  .usage li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--khaki)}
+
+  /* 로고 */
+  .logo-lockups{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:680px){.logo-lockups{grid-template-columns:1fr 1fr}}
+  .ll{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+  .ll.dark{background:var(--dark)}
+  .ll.dark .cap{color:#cfcec3}
+  .ll .cap{font-size:11.5px;color:var(--muted);font-weight:600}
+  .lockup{display:flex;align-items:center;gap:12px}
+  .lockup.stack{flex-direction:column;gap:8px}
+  .lockup .lm{width:44px;height:49px}
+  .lockup .wt{text-align:left;line-height:1}
+  .lockup.stack .wt{text-align:center}
+  .lockup .wt .en{font-size:9px;letter-spacing:.16em;font-weight:700}
+  .lockup .wt .main{font-size:20px;font-weight:800;letter-spacing:.01em}
+  .lockup .wt .sub{font-size:9px;letter-spacing:.02em;font-weight:500;margin-top:3px}
+  sup.reg{font-size:.5em;vertical-align:top;font-weight:600}
+  .clearspace{display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:24px}
+  .cs-box{position:relative;padding:26px;border:1px dashed var(--khaki);border-radius:10px}
+  .cs-box .lm{width:52px;height:58px;color:var(--grey);display:block}
+
+  /* 타이포 스케일 */
+  .typescale{display:grid;gap:2px}
+  .ts{display:grid;grid-template-columns:150px 1fr;align-items:baseline;gap:20px;padding:14px 0;border-bottom:1px solid var(--line-soft)}
+  .ts .meta{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .ts .meta b{color:var(--ink);font-weight:700}
+  .ts .demo{color:var(--ink);letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* 섹션 청사진 */
+  .bp{display:grid;grid-template-columns:1fr 1fr;gap:20px;background:var(--card);border:1px solid var(--line-soft);border-radius:16px;padding:22px;margin-bottom:14px}
+  @media(max-width:760px){.bp{grid-template-columns:1fr}}
+  .bp .meta .tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--khaki);background:var(--tint);border-radius:999px;padding:4px 11px;margin-bottom:12px}
+  .bp .meta .tag.dark{background:var(--dark);color:#cdd6bd}
+  .bp .meta h4{font-size:18px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+  .bp .meta .goal{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .bp .meta dl{display:grid;grid-template-columns:64px 1fr;gap:6px 12px;font-size:12.5px}
+  .bp .meta dt{color:var(--faint);font-weight:700}
+  .bp .meta dd{color:var(--ink)}
+  .bp .meta dd .cta{display:inline-block;background:var(--khaki);color:#fff;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700;margin:2px 4px 2px 0}
+  .wire{background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:9px;min-height:150px;justify-content:center}
+  .wire.dk{background:var(--dark)}
+  .wire .r{height:9px;border-radius:5px;background:var(--line)}
+  .wire.dk .r{background:rgba(236,235,224,.14)}
+  .wire .r.k{background:var(--khaki)}
+  .wire .r.s{background:var(--sage)}
+  .wire .r.w60{width:60%}.wire .r.w40{width:40%}.wire .r.w80{width:80%}.wire .r.w30{width:30%}
+  .wire .row{display:flex;gap:8px}
+  .wire .row .b{flex:1;height:44px;border-radius:8px;background:var(--line)}
+  .wire.dk .row .b{background:rgba(236,235,224,.1)}
+  .wire .pill{align-self:flex-start;height:22px;width:96px;border-radius:999px;background:var(--khaki)}
+  .wire .cta2{height:30px;width:120px;border-radius:999px;background:var(--khaki)}
+
+  /* 컴포넌트 프리뷰 */
+  .comp{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:22px}
+  .comp .lbl{font-size:11px;letter-spacing:.06em;font-weight:800;color:var(--faint);margin-bottom:14px}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .btn{border:none;font-family:inherit;font-weight:700;border-radius:999px;padding:12px 22px;font-size:14px;cursor:default}
+  .btn.p{background:var(--khaki);color:#fff}
+  .btn.g{background:transparent;color:var(--grey);border:1px solid var(--line)}
+  .btn.kk{background:#fae100;color:#3c1e1e}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip2{background:var(--tint);border:1px solid var(--line-soft);color:var(--khaki);font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px}
+  .mrow{display:grid;grid-template-columns:60px 1fr;gap:12px;align-items:center;margin-bottom:9px}
+  .mrow .lb{font-size:12px;color:var(--muted);font-weight:700}
+  .mrow .bar{height:7px;border-radius:999px;background:var(--line-soft);overflow:hidden}
+  .mrow .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--khaki),var(--sage))}
+  .qopt{border:1px solid var(--line-soft);border-radius:12px;padding:13px 16px;font-size:14px;display:flex;gap:12px;align-items:center;background:var(--card);margin-bottom:8px}
+  .qopt.on{border-color:var(--khaki);background:var(--tint)}
+
+  /* 락인/링크 리스트 */
+  .checklist{display:grid;gap:10px}
+  .ck{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line-soft);border-radius:12px;padding:14px 16px}
+  .ck .ic{width:34px;height:34px;border-radius:9px;background:var(--tint);border:1px solid var(--line-soft);display:grid;place-items:center;font-size:16px;flex:none}
+  .ck .tx b{font-size:14px}
+  .ck .tx p{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .linktable{width:100%;border-collapse:collapse;font-size:13.5px}
+  .linktable th,.linktable td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line-soft)}
+  .linktable th{font-size:11px;letter-spacing:.05em;color:var(--faint);font-weight:800}
+  .linktable td code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--khaki);background:var(--code);padding:2px 7px;border-radius:5px}
+  .pend{margin-top:40px;padding:24px;border:1px dashed var(--line);border-radius:14px;font-size:13.5px;color:var(--muted)}
+  .pend b{color:var(--ink)}
+  footer.doc{border-top:1px solid var(--line-soft);padding:30px 0;font-size:12px;color:var(--faint);text-align:center}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-in">
+    <div class="tn-brand">
+      <svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg>
+      <span><small>DOHA COFFEE</small><b>디자인 가이드</b></span>
+    </div>
+    <div class="tn-right">
+      <span>v1.0 · 랜딩페이지 스펙</span>
+      <button class="themebtn" id="themebtn" aria-label="테마 전환">◐ 테마</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- TOC -->
+  <nav class="toc">
+    <p class="t">CONTENTS</p>
+    <a href="#f"><b>01</b>브랜드 파운데이션</a>
+    <a href="#c"><b>02</b>컬러 시스템</a>
+    <a href="#l"><b>03</b>로고</a>
+    <a href="#t"><b>04</b>타이포그래피</a>
+    <a href="#ia"><b>05</b>페이지 구조 · 섹션</a>
+    <a href="#cp"><b>06</b>컴포넌트</a>
+    <a href="#lk"><b>07</b>전환 · 락인 장치</a>
+    <a href="#ln"><b>08</b>연결 링크 체크리스트</a>
+  </nav>
+
+  <main class="content">
+
+    <!-- 커버 -->
+    <header class="cover">
+      <div class="kicker">DOHA COFFEE · LANDING PAGE DESIGN SPEC</div>
+      <h1>커피는 오로지 맛.<br>그 철학을 화면으로 옮기는 설계서</h1>
+      <p class="lead">유튜브에서 이어진 시청자를 원두 구매로 전환시키는 랜딩페이지를, 디자이너가 그대로 화면화할 수 있도록 브랜드·컬러·로고·타이포·섹션·컴포넌트를 한 곳에 정리했습니다. 톤 앤 매너의 기준은 <b>절제미(Chic) · 편안함(Natural) · 차분함(Calm)</b>.</p>
+      <div class="meta">
+        <span>오프화이트 페이퍼 배경</span><span>카키 그린 포인트</span><span>크레마 그린 서브</span><span>클린 산세리프</span><span>재미 → 자부심</span>
+      </div>
+    </header>
+
+    <!-- 01 파운데이션 -->
+    <section class="doc" id="f">
+      <div class="sec-head"><span class="sec-no">01</span><h2>브랜드 파운데이션</h2></div>
+      <p class="sec-sub">모든 화면 결정의 상위 기준. 카피 한 줄, 색 한 칸도 아래 정의에서 벗어나지 않게 합니다.</p>
+
+      <p class="quote">"감성이 아니라 맛으로, 감(感)이 아니라 근거로 증명하는 홈카페 커피."</p>
+
+      <h3 class="blk">핵심 정의</h3>
+      <dl class="deflist">
+        <dt>미션</dt><dd>집에서 핸드드립하는 사람들에게 "달고나 같은 커피 단맛"을 널리 알린다.</dd>
+        <dt>슬로건</dt><dd>커피는 오로지 맛 · 핸드드립</dd>
+        <dt>핵심 타깃</dt><dd>"원두·장비 샀는데 왜 카페 맛이 안 나지?" 답답한 홈카페 입문~중급자</dd>
+        <dt>감정 여정</dt><dd>① 재미(집에서도 이렇게 맛있구나) → ② 자부심(사 먹는 것보다 내가 내린 게 낫네)</dd>
+        <dt>화법</dt><dd>"~하세요"가 아니라 "~해보면 달라져요" — 가르치지 않고 동행하는 톤</dd>
+        <dt>차별점(해자)</dt><dd>국가자격 평생교육사 · 바리스타 / 8년 · 800명+ 교육 / 전남 나주 로스터리</dd>
+      </dl>
+
+      <h3 class="blk">브랜드 3축 — 셋의 교집합이 도하커피</h3>
+      <div class="axis3">
+        <div class="a"><div class="n">01</div><h5>오로지 <span>맛</span></h5><p>유행·감성이 아니라 맛으로만 승부. 진정성.</p></div>
+        <div class="a"><div class="n">02</div><h5>피셜 아닌 <span>근거</span></h5><p>검증된 이론·실무로 "왜 맛있는지"까지. 신뢰.</p></div>
+        <div class="a"><div class="n">03</div><h5>일상의 작은 <span>행복</span></h5><p>차갑지 않은 전문성, 사람 냄새. 따뜻함.</p></div>
+      </div>
+
+      <h3 class="blk">시그니처 포지션</h3>
+      <div class="grid g2">
+        <div class="card"><h4>단맛 중심 <span class="lead-word">← 우리</span></h4><p>잘 볶고 잘 내렸을 때 올라오는 고소하고 달짝지근한, <b>달고나 같은 오리지널 단맛</b>. 스페셜티 품질은 살리되 단맛을 입히는 로스팅·추출.</p></div>
+        <div class="card"><h4>신맛 중심 <span style="color:var(--faint)">시장 트렌드</span></h4><p>산미가 강조된 주류 커피. 도하커피는 여기에 맞서 단맛을 트렌디하게 재해석해 자리를 잡습니다.</p></div>
+      </div>
+    </section>
+
+    <!-- 02 컬러 -->
+    <section class="doc" id="c">
+      <div class="sec-head"><span class="sec-no">02</span><h2>컬러 시스템</h2></div>
+      <p class="sec-sub">커피·도시·자연의 혼합. 공식 3색을 축으로, 배경·보조 토큰을 확장해 운용합니다.</p>
+
+      <h3 class="blk">공식 브랜드 컬러</h3>
+      <div class="grid g3">
+        <div class="sw">
+          <div class="chip" style="background:#333333"></div>
+          <div class="info">
+            <div class="nm">뉴욕 로스팅 그레이</div>
+            <div class="en">NEW YORK ROASTING GREY</div>
+            <code>HEX #333333</code><code>RGB 51 · 51 · 51</code><code>CMYK 69 · 63 · 62 · 58</code>
+            <span class="role">본문 텍스트 · 다크 섹션 · 심볼</span>
+          </div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#556B2F"></div>
+          <div class="info">
+            <div class="nm">나주 블렌딩 카키</div>
+            <div class="en">NAJU BLENDING KHAKI</div>
+            <code>HEX #556B2F</code><code>RGB 85 · 107 · 47</code><code>CMYK 66 · 38 · 100 · 26</code>
+            <span class="role">메인 포인트 · 버튼 · 강조 · 링크</span>
+          </div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#9CAF88"></div>
+          <div class="info">
+            <div class="nm">교토 크레마 그린</div>
+            <div class="en">KYOTO CREMA GREEN</div>
+            <code>HEX #9CAF88</code><code>RGB 156 · 175 · 136</code><code>CMYK 42 · 20 · 54 · 1</code>
+            <span class="role">서브 · 소프트 필 · 아이콘 · 하이라이트</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="blk">확장 토큰 (운용용)</h3>
+      <div class="tokrow">
+        <span class="tok"><i style="background:#f2f1ea"></i><span>페이퍼 배경</span><code>#F2F1EA</code></span>
+        <span class="tok"><i style="background:#fbfaf6"></i><span>카드/밝은 면</span><code>#FBFAF6</code></span>
+        <span class="tok"><i style="background:#e8ede0"></i><span>세이지 틴트</span><code>#E8EDE0</code></span>
+        <span class="tok"><i style="background:#44571f"></i><span>카키 딥(호버)</span><code>#44571F</code></span>
+        <span class="tok"><i style="background:#70746a"></i><span>뮤트 텍스트</span><code>#70746A</code></span>
+        <span class="tok"><i style="background:#232321"></i><span>딥 차콜(푸터)</span><code>#232321</code></span>
+      </div>
+
+      <h3 class="blk">사용 규칙</h3>
+      <div class="usage">
+        <div class="do">
+          <h6>✓ DO</h6>
+          <ul>
+            <li>배경은 오프화이트 페이퍼, 텍스트는 차콜 그레이가 기본</li>
+            <li>강조·버튼·링크는 카키 그린 1색으로 통일</li>
+            <li>단맛 시그니처·최종 CTA만 차콜 다크 섹션으로 리듬</li>
+            <li>카키:세이지 = 포인트:보조. 세이지는 넓은 면·틴트에</li>
+          </ul>
+        </div>
+        <div class="dont">
+          <h6>✕ DON'T</h6>
+          <ul>
+            <li>브라운·오렌지·캐러멜 등 팔레트 밖 색을 포인트로 쓰지 않기</li>
+            <li>카키와 세이지를 동일 비중으로 나란히 넓게 깔지 않기</li>
+            <li>다크 섹션을 3개 이상 남발해 무거워지지 않게</li>
+            <li>순수 검정(#000)·순수 회색 대신 브랜드 그레이 사용</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 로고 -->
+    <section class="doc" id="l">
+      <div class="sec-head"><span class="sec-no">03</span><h2>로고</h2></div>
+      <p class="sec-sub">심볼은 위가 넓고 아래로 좁아지며 한 방울로 떨어지는 <b>드립(추출) 형태</b> — "정성껏 내린 한 잔"을 상징. 상황에 맞는 락업을 선택합니다.</p>
+
+      <h3 class="blk">기본 로고 — 웹 전체 단일 운용</h3>
+      <p style="font-size:13.5px;color:var(--muted);margin:-6px 0 16px">로고는 <b style="color:var(--ink)">가로형 · 영문 + 태그라인(DOHA COFFEE® / Raising the Coffee Bar)</b> 하나로 통일합니다. 아래는 같은 로고의 배경·컬러 적용 변형입니다.</p>
+      <div class="logo-lockups">
+        <div class="ll"><div class="lockup" style="color:var(--grey)"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg><div class="wt"><div class="main" style="font-size:15px;line-height:1.04">DOHA<br>COFFEE<sup class="reg">®</sup></div><div class="sub" style="color:var(--muted)">Raising the Coffee Bar</div></div></div><div class="cap">기본 · 라이트 배경 (헤더/본문)</div></div>
+        <div class="ll dark"><div class="lockup" style="color:#fff"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg><div class="wt" style="color:#fff"><div class="main" style="font-size:15px;line-height:1.04">DOHA<br>COFFEE<sup class="reg">®</sup></div><div class="sub" style="color:#cfcec3">Raising the Coffee Bar</div></div></div><div class="cap">다크 배경 · 화이트</div></div>
+        <div class="ll dark"><div class="lockup" style="color:var(--sage)"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg><div class="wt" style="color:#ecebe0"><div class="main" style="font-size:15px;line-height:1.04">DOHA<br>COFFEE<sup class="reg">®</sup></div><div class="sub" style="color:#cfcec3">Raising the Coffee Bar</div></div></div><div class="cap">다크 배경 · 심볼 세이지 (푸터)</div></div>
+        <div class="ll"><div class="lockup" style="color:var(--khaki)"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg><div class="wt" style="color:var(--khaki)"><div class="main" style="font-size:15px;line-height:1.04">DOHA<br>COFFEE<sup class="reg">®</sup></div><div class="sub" style="color:var(--khaki)">Raising the Coffee Bar</div></div></div><div class="cap">단색 · 카키</div></div>
+        <div class="ll"><div class="lockup" style="color:var(--grey)"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg></div><div class="cap">심볼 단독 (앱·파비콘·워터마크)</div></div>
+      </div>
+
+      <h3 class="blk">여백(클리어스페이스) · 최소 크기</h3>
+      <div class="clearspace">
+        <div class="cs-box"><svg class="lm" viewBox="0 0 100 100"><g fill="currentColor"><ellipse cx="50" cy="24" rx="30" ry="8.4"/><ellipse cx="50" cy="39.5" rx="26" ry="7.2"/><ellipse cx="50" cy="52.5" rx="20.5" ry="6.3"/><ellipse cx="50" cy="63.5" rx="14.5" ry="5.3"/><ellipse cx="50" cy="73" rx="8.5" ry="4.2"/><ellipse cx="50" cy="81" rx="3.8" ry="2.8"/></g></svg></div>
+        <div style="font-size:13.5px;color:var(--muted);max-width:44ch">
+          <p style="margin-bottom:10px">사방 여백은 <b style="color:var(--ink)">심볼 최상단 타원의 높이(1x)</b> 이상 확보합니다. 다른 요소·텍스트가 이 영역을 침범하지 않게 합니다.</p>
+          <p>최소 크기 — 심볼 단독 <b style="color:var(--ink)">24px</b>, 가로형 락업 높이 <b style="color:var(--ink)">28px</b> 이상. 그 이하에서는 심볼만 사용.</p>
+        </div>
+      </div>
+
+      <div class="usage" style="margin-top:16px">
+        <div class="do"><h6>✓ DO</h6><ul><li>단색(그레이/화이트/카키/세이지)으로만 사용</li><li>밝은 배경엔 그레이, 어두운 배경엔 화이트 또는 세이지</li><li>심볼 비율·이격 유지</li></ul></div>
+        <div class="dont"><h6>✕ DON'T</h6><ul><li>심볼을 가로/세로로 늘리거나 회전하지 않기</li><li>그라디언트·그림자·외곽선 추가 금지</li><li>저대비 배경 위에 올려 가독성 해치지 않기</li></ul></div>
+      </div>
+    </section>
+
+    <!-- 04 타이포 -->
+    <section class="doc" id="t">
+      <div class="sec-head"><span class="sec-no">04</span><h2>타이포그래피</h2></div>
+      <p class="sec-sub">브랜드 워드마크 톤에 맞춘 <b>클린 산세리프</b> 단일 서체 운용. 웨이트와 자간으로 위계를 만듭니다. 국문 Pretendard / 영문 동일 계열(대체: 시스템 산세리프).</p>
+
+      <div class="typescale">
+        <div class="ts"><div class="meta"><b>Display</b><br>44–70px · 900 · -3%</div><div class="demo" style="font-size:34px;font-weight:900;letter-spacing:-.03em">사 먹는 것보다 맛있어지는 순간</div></div>
+        <div class="ts"><div class="meta"><b>H2 섹션</b><br>27–42px · 800 · -2.5%</div><div class="demo" style="font-size:26px;font-weight:800;letter-spacing:-.025em">단맛으로 큐레이션한 네 가지 산지</div></div>
+        <div class="ts"><div class="meta"><b>H3/카드</b><br>18–23px · 800</div><div class="demo" style="font-size:20px;font-weight:800">Colombia Huila Supremo</div></div>
+        <div class="ts"><div class="meta"><b>Eyebrow</b><br>12–13px · 700 · +20% 대문자</div><div class="demo" style="font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--khaki)">SINGLE ORIGIN LINEUP</div></div>
+        <div class="ts"><div class="meta"><b>본문</b><br>15–19px · 400 · 행간 1.7</div><div class="demo" style="font-size:16px;font-weight:400;color:var(--muted)">잘 볶고 잘 내렸을 때 올라오는 달짝지근한 단맛.</div></div>
+        <div class="ts"><div class="meta"><b>캡션/스펙</b><br>12–13px · 600</div><div class="demo" style="font-size:13px;font-weight:600;color:var(--muted)">재배고도 1,400 ~ 2,000M · Washed</div></div>
+      </div>
+    </section>
+
+    <!-- 05 IA -->
+    <section class="doc" id="ia">
+      <div class="sec-head"><span class="sec-no">05</span><h2>페이지 구조 · 섹션</h2></div>
+      <p class="sec-sub">유입(호기심) → 신뢰(팩트) → 전환(구매)의 흐름. 라이트 섹션 사이에 다크 앵커 2곳(단맛·최종 CTA)으로 리듬을 줍니다. 각 섹션의 목적·카피·컴포넌트·CTA·배경을 아래에 정의.</p>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">HERO · 라이트</span>
+          <h4>히어로</h4>
+          <p class="goal">유튜브에서 온 시청자를 3초 안에 붙잡고 정체성 각인.</p>
+          <dl>
+            <dt>카피</dt><dd>"집에서 내린 커피가 사 먹는 것보다 맛있어지는 순간" + 달고나 단맛 서브카피</dd>
+            <dt>구성</dt><dd>유튜브 배지 · 크리덴셜 4지표(8년/800명+/국가자격/나주)</dd>
+            <dt>CTA</dt><dd><span class="cta">원두 라인업</span><span class="cta">취향 진단</span></dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="pill"></div><div class="r k w80" style="height:14px"></div><div class="r w60" style="height:14px"></div><div class="r w40"></div><div class="cta2"></div><div class="row" style="margin-top:6px"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">WHY · 라이트</span>
+          <h4>브랜드 3축 철학</h4>
+          <p class="goal">"흔한 원두가 아닌 이유" — 맛·근거·행복으로 신뢰 형성.</p>
+          <dl>
+            <dt>구성</dt><dd>3열 카드(01 맛 · 02 근거 · 03 행복), 넘버 워터마크 + 아이콘</dd>
+            <dt>배경</dt><dd>크림(#FBFAF6)</dd>
+            <dt>CTA</dt><dd>없음 (신뢰 빌드업)</dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="r w40"></div><div class="row"><div class="b"></div><div class="b"></div><div class="b"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag dark">SIGNATURE · 다크</span>
+          <h4>단맛 이야기 (앵커)</h4>
+          <p class="goal">시그니처 "달고나 단맛" 포지션을 신맛 트렌드와 대비.</p>
+          <dl>
+            <dt>구성</dt><dd>좌: 카피 + 신맛 vs 단맛 비교 카드 / 우: 크레마 톤 원형 그래픽</dd>
+            <dt>배경</dt><dd>차콜 그레이 + 카키 글로우</dd>
+            <dt>CTA</dt><dd>없음 (정서적 각인)</dd>
+          </dl>
+        </div>
+        <div class="wire dk"><div class="r s w30"></div><div class="r w80" style="height:13px"></div><div class="r w60"></div><div class="row"><div class="b"></div><div class="b"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">LINEUP · 라이트</span>
+          <h4>원두 라인업 (4종)</h4>
+          <p class="goal">콜롬비아·과테말라·에티오피아·탄자니아. 근거와 함께 구매 유도.</p>
+          <dl>
+            <dt>카드</dt><dd>국가 플래그 바 · 커핑노트 칩 · 스펙표 · 단맛/산미/바디/로스팅 미터 · "왜 이렇게 볶았나" 라벨 · 가격</dd>
+            <dt>배경</dt><dd>페이퍼 · 2×2 그리드</dd>
+            <dt>CTA</dt><dd><span class="cta">담기</span> (카드별)</dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="row"><div class="b" style="height:60px"></div><div class="b" style="height:60px"></div></div><div class="row"><div class="b" style="height:60px"></div><div class="b" style="height:60px"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">FINDER · 라이트</span>
+          <h4>취향 진단 퀴즈</h4>
+          <p class="goal">선택 장애 해소 + 참여형 락인. 3문항 → 맞춤 원두 추천.</p>
+          <dl>
+            <dt>구성</dt><dd>진행바 · 문항 1~3(4지선다) · 결과 카드(추천 원두·노트·설명)</dd>
+            <dt>로직</dt><dd>답변별 원두 점수 가중 합산 → 최고점 추천</dd>
+            <dt>CTA</dt><dd><span class="cta">이 원두 담기</span><span class="cta">카카오 상담</span></dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="r k w30" style="height:6px"></div><div class="r w40"></div><div class="qopt" style="margin:0"><div class="r w60" style="flex:1;height:8px"></div></div><div class="qopt on" style="margin:0"><div class="r w60" style="flex:1;height:8px"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">LOCK-IN · 라이트</span>
+          <h4>원두 그 이상 (락인)</h4>
+          <p class="goal">QR 가이드·근거 라벨·정기구독·클래스로 재구매/충성 설계.</p>
+          <dl>
+            <dt>구성</dt><dd>4열 아이콘 카드</dd>
+            <dt>배경</dt><dd>페이퍼</dd>
+            <dt>CTA</dt><dd>섹션 자체가 신뢰 강화 (직접 CTA 없음)</dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="r w40"></div><div class="row"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag">REVIEWS · 라이트</span>
+          <h4>후기</h4>
+          <p class="goal">"사 먹는 것보다 맛있다" 실사용 후기로 마지막 저항 해소.</p>
+          <dl>
+            <dt>구성</dt><dd>3열 후기 카드(별점·인용·구매 원두)</dd>
+            <dt>배경</dt><dd>크림</dd>
+            <dt>CTA</dt><dd>없음</dd>
+          </dl>
+        </div>
+        <div class="wire"><div class="row"><div class="b"></div><div class="b"></div><div class="b"></div></div></div>
+      </div>
+
+      <div class="bp">
+        <div class="meta">
+          <span class="tag dark">FINAL · 다크</span>
+          <h4>최종 CTA (앵커)</h4>
+          <p class="goal">카카오채널 친구추가로 소유 리드 확보 + 첫 구매 쿠폰.</p>
+          <dl>
+            <dt>구성</dt><dd>헤드라인 + 카카오/구매 버튼 + 유튜브·나주 매장 안내</dd>
+            <dt>배경</dt><dd>차콜 그레이 + 카키 글로우</dd>
+            <dt>CTA</dt><dd><span class="cta" style="background:#fae100;color:#3c1e1e">카카오 쿠폰</span><span class="cta">원두 담기</span></dd>
+          </dl>
+        </div>
+        <div class="wire dk" style="align-items:center;text-align:center"><div class="r s w60" style="align-self:center;height:13px"></div><div class="r w40" style="align-self:center"></div><div class="row" style="justify-content:center"><div class="b" style="max-width:120px"></div><div class="b" style="max-width:120px"></div></div></div>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-top:6px">＋ 상시: 상단 안내바(유튜브 유입 문구) · 모바일 하단 고정 CTA(쿠폰/담기) · 푸터(딥 차콜).</p>
+    </section>
+
+    <!-- 06 컴포넌트 -->
+    <section class="doc" id="cp">
+      <div class="sec-head"><span class="sec-no">06</span><h2>컴포넌트</h2></div>
+      <p class="sec-sub">반복 사용되는 UI 요소. 라운드는 버튼·칩 999px(pill), 카드 14–22px.</p>
+      <div class="grid g2">
+        <div class="comp">
+          <div class="lbl">버튼</div>
+          <div class="btnrow"><button class="btn p">Primary · 카키</button><button class="btn g">Ghost</button><button class="btn kk">카카오</button></div>
+        </div>
+        <div class="comp">
+          <div class="lbl">커핑노트 칩</div>
+          <div class="chips"><span class="chip2">볶은 아몬드</span><span class="chip2">감귤</span><span class="chip2">브라운슈가</span><span class="chip2">누룽지</span></div>
+        </div>
+        <div class="comp">
+          <div class="lbl">근거 미터 (맛 프로파일)</div>
+          <div class="mrow"><span class="lb">단맛</span><span class="bar"><i style="width:82%"></i></span></div>
+          <div class="mrow"><span class="lb">산미</span><span class="bar"><i style="width:48%"></i></span></div>
+          <div class="mrow"><span class="lb">바디</span><span class="bar"><i style="width:72%"></i></span></div>
+        </div>
+        <div class="comp">
+          <div class="lbl">퀴즈 옵션 (기본 / 선택)</div>
+          <div class="qopt">🌸 화사한 꽃·과일 향</div>
+          <div class="qopt on">🍯 구수하고 달달한 누룽지 느낌</div>
+        </div>
+        <div class="comp">
+          <div class="lbl">"왜 이렇게 볶았나" 근거 라벨</div>
+          <div style="border:1px dashed var(--line);border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;font-weight:800;color:var(--khaki);margin-bottom:6px">🔬 왜 이렇게 볶았나</div>
+            <p style="font-size:13px;color:var(--muted)">미디엄 로스팅으로 감귤 산뜻함과 브라운슈가 단맛의 균형을 잡았습니다.</p>
+          </div>
+        </div>
+        <div class="comp">
+          <div class="lbl">크리덴셜 지표</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap">
+            <div><div style="font-size:24px;font-weight:800;color:var(--khaki);line-height:1">8년</div><div style="font-size:12px;color:var(--muted)">교육 경력</div></div>
+            <div><div style="font-size:24px;font-weight:800;color:var(--khaki);line-height:1">800명+</div><div style="font-size:12px;color:var(--muted)">수강 실적</div></div>
+            <div><div style="font-size:24px;font-weight:800;color:var(--khaki);line-height:1">국가자격</div><div style="font-size:12px;color:var(--muted)">평생교육사</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 락인 -->
+    <section class="doc" id="lk">
+      <div class="sec-head"><span class="sec-no">07</span><h2>전환 · 락인 장치</h2></div>
+      <p class="sec-sub">한 봉지로 끝나지 않는 구조. 무료 가치 90% + 자연스러운 연결 10% 원칙.</p>
+      <div class="checklist">
+        <div class="ck"><div class="ic">📱</div><div class="tx"><b>QR 추출 가이드</b><p>봉투 QR → 그 원두 전용 추출 영상 → 재유입·재구매 (유튜브와 연결).</p></div></div>
+        <div class="ck"><div class="ic">🏷️</div><div class="tx"><b>로스팅 근거 라벨</b><p>"왜 이 프로파일인지" 팩트를 제품화 — 신뢰 전략의 물리적 구현.</p></div></div>
+        <div class="ck"><div class="ic">🔁</div><div class="tx"><b>원두 정기구독</b><p>2주·4주 자동 배송으로 LTV·현금흐름 확보.</p></div></div>
+        <div class="ck"><div class="ic">🎓</div><div class="tx"><b>핸드드립 클래스</b><p>온·오프라인. 유튜브 = 무료 예고편, 클래스 = 고단가 전환.</p></div></div>
+        <div class="ck"><div class="ic">💬</div><div class="tx"><b>카카오채널 퍼널</b><p>영상 → 무료 취향 진단/첫 구매 쿠폰 → 친구 추가(소유 리드) → 리마인드 재구매.</p></div></div>
+      </div>
+    </section>
+
+    <!-- 08 링크 -->
+    <section class="doc" id="ln">
+      <div class="sec-head"><span class="sec-no">08</span><h2>연결 링크 체크리스트</h2></div>
+      <p class="sec-sub">배포 전 실제 URL로 교체해야 하는 지점. 현재는 안내용 플레이스홀더로 표시되어 있습니다.</p>
+      <div style="overflow-x:auto">
+        <table class="linktable">
+          <thead><tr><th>위치</th><th>연결 대상</th><th>현재 상태</th></tr></thead>
+          <tbody>
+            <tr><td>상단 안내바 · 유튜브 배지</td><td>유튜브 채널</td><td><code>#</code> 플레이스홀더</td></tr>
+            <tr><td>최종 CTA · 하단 고정바</td><td>카카오채널 친구추가</td><td><code>demo()</code> 안내</td></tr>
+            <tr><td>원두 카드 · 담기 / 취향 진단 결과</td><td>스마트스토어(또는 판매처) 상품</td><td><code>#final</code> 임시 앵커</td></tr>
+            <tr><td>푸터 · CONNECT</td><td>유튜브 / 카카오 / 나주 매장 안내</td><td><code>demo()</code> 안내</td></tr>
+            <tr><td>락인 · 클래스</td><td>클래스 신청/VOD 페이지</td><td><code>demo()</code> 안내</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pend">
+        <b>디자인 → 개발 핸드오프 메모.</b> 이 문서의 컬러 토큰·타이포 스케일·컴포넌트는 현재 라이브 <b>index.html</b>에 동일하게 구현되어 있습니다. 실제 로고 원본(SVG/AI)과 제품 사진, 그리고 위 링크 5종을 전달해 주시면 최종본에 반영합니다.
+      </div>
+    </section>
+
+    <footer class="doc">© 2026 도하커피 (DOHA COFFEE) · 랜딩페이지 디자인 가이드 v1.0 · 전남 나주 원두 로스터리</footer>
+  </main>
+</div>
+
+<script>
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('themebtn');
+    btn.addEventListener('click',function(){
+      var cur=root.getAttribute('data-theme');
+      if(!cur){ cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'; }
+      root.setAttribute('data-theme', cur==='dark'?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>

@@ -58,10 +58,10 @@
   .heavy{font-weight:900;letter-spacing:-.025em}
 
   /* 로고 마크 */
-  .logomark{width:36px;height:40px;flex:none;display:block}
-  .brand .txt small{display:block;font-size:10px;font-weight:600;color:var(--khaki);letter-spacing:.2em}
-  .brand .txt strong{font-size:19px;font-weight:800;letter-spacing:.02em}
-  .brand .txt strong sup{font-size:.5em;font-weight:600;vertical-align:top;margin-left:1px}
+  .logomark{width:38px;height:42px;flex:none;display:block}
+  .brand .txt .main{display:block;font-size:15px;font-weight:800;letter-spacing:.04em;line-height:1.02;color:inherit}
+  .brand .txt .main sup{font-size:.5em;font-weight:600;vertical-align:top;margin-left:1px}
+  .brand .txt .tag{display:block;font-size:8.5px;font-weight:500;color:var(--muted);letter-spacing:.02em;margin-top:4px}
   .brand{display:flex;align-items:center;gap:11px}
 
   /* ---------- 상단 안내바 ---------- */
@@ -307,7 +307,8 @@
   .foot-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-bottom:36px}
   .foot-brand{max-width:320px}
   .foot-brand .brand{margin-bottom:14px}
-  .foot-brand .brand .txt small{color:var(--sage)}
+  .foot-brand .brand .txt .main{color:var(--d-text)}
+  .foot-brand .brand .txt .tag{color:var(--d-muted)}
   .foot-brand p{font-size:13.5px;color:var(--d-muted)}
   .foot-cols{display:flex;gap:60px;flex-wrap:wrap}
   .foot-col h5{font-size:12.5px;letter-spacing:.12em;color:var(--sage);margin-bottom:14px;font-weight:700}
@@ -348,7 +349,7 @@
           <ellipse cx="50" cy="81" rx="3.8" ry="2.8"/>
         </g>
       </svg>
-      <span class="txt"><small>DOHA COFFEE</small><strong>도하커피<sup>®</sup></strong></span>
+      <span class="txt"><span class="main">DOHA<br>COFFEE<sup>®</sup></span><span class="tag">Raising the Coffee Bar</span></span>
     </a>
     <nav class="nav-links">
       <a href="#philosophy">브랜드 철학</a>
@@ -732,7 +733,7 @@
               <ellipse cx="50" cy="78" rx="10" ry="4.6"/>
             </g>
           </svg>
-          <span class="txt"><small>DOHA COFFEE</small><strong>도하커피<sup>®</sup></strong></span>
+          <span class="txt"><span class="main">DOHA<br>COFFEE<sup>®</sup></span><span class="tag">Raising the Coffee Bar</span></span>
         </a>
         <p>커피는 오로지 맛. 감성이 아니라 맛으로, 감이 아니라 근거로 증명하는 홈카페 원두. 달고나 같은 오리지널 단맛을 집에서.</p>
       </div>
