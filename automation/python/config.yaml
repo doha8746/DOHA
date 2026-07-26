@@ -1,0 +1,47 @@
+# 네이버 → 한진 변환 설정
+# 실제 다운로드한 파일의 헤더에 맞게 이 파일만 고치면 됩니다.
+# (헤더 이름은 "포함" 매칭 — '수취인연락처'는 '수취인연락처1'에도 매칭)
+
+# 네이버 스마트스토어 주문 엑셀의 컬럼 이름
+naver_cols:
+  receiver:        "수취인명"
+  receiver_phone:  "수취인연락처1"
+  receiver_phone2: "수취인연락처2"
+  zipcode:         "우편번호"
+  address:         "배송지"
+  product_name:    "상품명"
+  option:          "옵션정보"
+  quantity:        "수량"
+  delivery_memo:   "배송메세지"
+
+# 한진 원클릭 업로드 양식의 컬럼(순서 = 출력 순서)
+hanjin_cols:
+  - 받는분성명
+  - 받는분전화번호
+  - 받는분기타연락처
+  - 받는분우편번호
+  - 받는분주소
+  - 품목명
+  - 내품수량
+  - 박스수량
+  - 운임구분
+  - 배송메시지
+
+# 매핑 규칙
+#   from:  <naver_cols 키>   → 해당 값 그대로
+#   const: <문자열>          → 고정값
+#   fn:    phone|phone2|item_name → 계산
+mapping:
+  받는분성명:       { from: receiver }
+  받는분전화번호:   { fn: phone }
+  받는분기타연락처: { fn: phone2 }
+  받는분우편번호:   { from: zipcode }
+  받는분주소:       { from: address }
+  품목명:           { fn: item_name }
+  내품수량:         { from: quantity }
+  박스수량:         { const: "1" }
+  운임구분:         { const: "신용" }   # 신용/선불/착불
+  배송메시지:       { from: delivery_memo }
+
+# 같은 수취인+주소+연락처를 한 송장으로 합치고 품목/수량 합산
+combine_by_receiver: true
