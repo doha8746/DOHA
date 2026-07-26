@@ -1,23 +1,27 @@
 /**
- * Code.gs — 메인 변환 엔진
+ * Code.gs — 메인 변환 엔진 (자동 변환)
  *
- * 네이버주문 탭 → (변환) → 한진송장 탭 → CSV 다운로드
- * 메뉴에서 버튼으로 실행합니다. Config.gs 의 설정을 사용합니다.
+ * 네이버주문 탭에 붙여넣기만 하면 → 한진송장 탭이 자동으로 채워집니다.
+ * 버튼을 누를 필요가 없습니다. (onEdit 자동 트리거)
+ * 준비된 결과는 메뉴에서 한진양식 CSV로 내려받아 원클릭 대량접수에 업로드합니다.
+ * 설정(컬럼 매핑)은 Config.gs 에서 조정합니다.
  */
+
+var SHEET_CONFIG = '_설정';   // 자동변환 ON/OFF 체크박스가 있는 탭
 
 // ── 시트 열릴 때 커스텀 메뉴 생성 ──────────────────────────────────────
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('택배자동화')
     .addItem('① 초기 시트 세팅', 'setupSheets')
-    .addItem('② 네이버→한진 변환', 'convertNaverToHanjin')
-    .addItem('③ 한진양식 CSV 다운로드', 'downloadHanjinCsv')
+    .addItem('한진양식 CSV 다운로드', 'downloadHanjinCsv')
     .addSeparator()
+    .addItem('지금 즉시 다시 변환', 'convertNaverToHanjin')
     .addItem('한진송장 탭 비우기', 'clearHanjinSheet')
     .addToUi();
 }
 
-// ── ① 초기 시트 세팅: 탭과 헤더 생성 ──────────────────────────────────
+// ── ① 초기 시트 세팅: 탭·헤더·자동변환 스위치 생성 ────────────────────
 function setupSheets() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
@@ -33,21 +37,61 @@ function setupSheets() {
   hanjin.getRange(1, 1, 1, HANJIN_COLS.length).setValues([HANJIN_COLS]).setFontWeight('bold');
   hanjin.setFrozenRows(1);
 
+  // 자동변환 스위치 탭 (체크박스). 체크돼 있으면 붙여넣는 즉시 자동 변환.
+  var cfg = ss.getSheetByName(SHEET_CONFIG) || ss.insertSheet(SHEET_CONFIG);
+  cfg.clear();
+  cfg.getRange('A1').setValue('자동변환(붙여넣으면 바로)').setFontWeight('bold');
+  cfg.getRange('B1').insertCheckboxes().check();
+  cfg.getRange('A3').setValue('※ 이 탭은 건드리지 마세요. B1 체크를 끄면 자동변환이 멈춥니다.')
+    .setFontColor('#888888');
+  cfg.setColumnWidth(1, 220);
+
   SpreadsheetApp.getUi().alert(
     '세팅 완료 ✅\n\n' +
-    '1) "' + SHEET_NAVER + '" 탭에 네이버 주문 엑셀을 붙여넣으세요.\n' +
-    '2) 메뉴 "택배자동화 > ② 네이버→한진 변환"을 누르세요.'
+    '이제 "' + SHEET_NAVER + '" 탭에 네이버 주문 엑셀을 붙여넣기만 하면\n' +
+    '"' + SHEET_HANJIN + '" 탭이 자동으로 채워집니다. (버튼 불필요)\n\n' +
+    '출력할 때: 메뉴 "택배자동화 > 한진양식 CSV 다운로드".'
   );
 }
 
-// ── ② 변환 실행 ───────────────────────────────────────────────────────
+// ── 자동 변환 트리거: 네이버주문 탭이 바뀌면 스스로 실행 ───────────────
+// 단순 onEdit 트리거 — 사용자의 붙여넣기/입력에만 반응하고,
+// 스크립트가 한진송장에 쓰는 것에는 반응하지 않아 무한루프가 없습니다.
+function onEdit(e) {
+  try {
+    if (!e || !e.range) return;
+    var edited = e.range.getSheet();
+    if (edited.getName() !== SHEET_NAVER) return;       // 주문 탭 변경만 반응
+    if (!isAutoOn(e.source)) return;                    // 스위치 꺼져 있으면 패스
+    runConversion(false);                               // 조용히 변환(알림 없음)
+  } catch (err) {
+    // 자동 트리거에서는 알림을 띄울 수 없으므로 로그만 남김
+    console.error('자동변환 오류: ' + err);
+  }
+}
+
+function isAutoOn(ss) {
+  var cfg = ss.getSheetByName(SHEET_CONFIG);
+  if (!cfg) return true;                 // 스위치 탭이 없으면 기본 ON
+  return cfg.getRange('B1').getValue() === true;
+}
+
+// ── 메뉴: 지금 즉시 다시 변환(알림 표시) ──────────────────────────────
 function convertNaverToHanjin() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var naver = ss.getSheetByName(SHEET_NAVER);
-  if (!naver || naver.getLastRow() < 2) {
+  var n = runConversion(true);
+  if (n < 0) {
     SpreadsheetApp.getUi().alert('"' + SHEET_NAVER + '" 탭에 주문 데이터가 없습니다.');
     return;
   }
+  SpreadsheetApp.getUi().alert('변환 완료 ✅  송장 ' + n + '건 생성됨.\n"' +
+    SHEET_HANJIN + '" 탭을 확인하고 CSV로 내려받으세요.');
+}
+
+// ── 변환 코어(자동/수동 공용) : 성공 시 송장 건수, 데이터 없으면 -1 ────
+function runConversion(showResize) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var naver = ss.getSheetByName(SHEET_NAVER);
+  if (!naver || naver.getLastRow() < 2) return -1;
 
   var rows = readAsObjects(naver);          // 헤더 기준으로 각 행을 {키:값}으로
   if (COMBINE_BY_RECEIVER) rows = combineByReceiver(rows);
@@ -55,16 +99,17 @@ function convertNaverToHanjin() {
   var out = rows.map(buildHanjinRow).filter(function (r) { return r !== null; });
 
   var hanjin = ss.getSheetByName(SHEET_HANJIN) || ss.insertSheet(SHEET_HANJIN);
-  hanjin.clear();
+  // 기존 데이터 영역만 지우고 다시 씀(전체 clear 대신 → 서식/틀고정 유지)
+  if (hanjin.getLastRow() > 1) {
+    hanjin.getRange(2, 1, hanjin.getLastRow() - 1, HANJIN_COLS.length).clearContent();
+  }
   hanjin.getRange(1, 1, 1, HANJIN_COLS.length).setValues([HANJIN_COLS]).setFontWeight('bold');
   if (out.length > 0) {
     hanjin.getRange(2, 1, out.length, HANJIN_COLS.length).setValues(out);
   }
   hanjin.setFrozenRows(1);
-  hanjin.autoResizeColumns(1, HANJIN_COLS.length);
-
-  SpreadsheetApp.getUi().alert('변환 완료 ✅  송장 ' + out.length + '건 생성됨.\n"' +
-    SHEET_HANJIN + '" 탭을 확인하고 CSV로 내려받으세요.');
+  if (showResize) hanjin.autoResizeColumns(1, HANJIN_COLS.length);
+  return out.length;
 }
 
 // ── ③ 한진송장 탭을 CSV로 다운로드(링크 제공) ─────────────────────────
