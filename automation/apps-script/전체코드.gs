@@ -12,9 +12,15 @@
 /* ═══════════════════════ 설정(매핑) ═══════════════════════ */
 
 // 시트 탭 이름
-var SHEET_NAVER  = '네이버주문';
-var SHEET_HANJIN = '한진송장';
-var SHEET_CONFIG = '_설정';
+var SHEET_NAVER    = '네이버주문';
+var SHEET_HANJIN   = '한진송장';
+var SHEET_CONFIG   = '_설정';
+var SHEET_HISTORY  = '주문내역';   // 그동안 받은 주문 누적 로그
+var SHEET_CUSTOMER = '고객관리';   // 고객별 집계(단골 관리)
+
+// 주문내역/고객관리 탭 열 구성
+var HISTORY_COLS  = ['기록일시','상품주문번호','주문일시','수취인명','전화번호','우편번호','주소','상품명','옵션','수량','배송메모'];
+var CUSTOMER_COLS = ['수취인명','전화번호','최근주소','총주문건수','총수량','구매상품','첫주문일','최근주문일'];
 
 // 네이버 주문 엑셀의 헤더 이름 (열 순서는 상관없음 — 이름으로 찾음)
 var NAVER_COLS = {
@@ -29,7 +35,8 @@ var NAVER_COLS = {
   productName:    '상품명',
   option:         '옵션정보',
   quantity:       '수량',
-  deliveryMemo:   '배송메세지'
+  deliveryMemo:   '배송메세지',
+  orderDate:      '주문일시'
 };
 
 // 한진 원클릭 대량접수 양식 헤더 (순서 = 출력 순서)
@@ -71,6 +78,9 @@ function onOpen() {
     .addItem('① 초기 시트 세팅', 'setupSheets')
     .addItem('한진양식 CSV 다운로드', 'downloadHanjinCsv')
     .addSeparator()
+    .addItem('주문내역에 누적하기', 'appendOrderHistory')
+    .addItem('고객관리 갱신', 'updateCustomers')
+    .addSeparator()
     .addItem('지금 즉시 다시 변환', 'convertNaverToHanjin')
     .addItem('한진송장 탭 비우기', 'clearHanjinSheet')
     .addToUi();
@@ -102,6 +112,21 @@ function setupSheets() {
   cfg.getRange('A3').setValue('※ 이 탭은 건드리지 마세요. B1 체크를 끄면 자동변환이 멈춥니다.')
     .setFontColor('#888888');
   cfg.setColumnWidth(1, 220);
+
+  // 주문내역(누적 로그) 탭 — 없으면 만들고 헤더 생성. 있으면 기존 데이터 보존.
+  var hist = ss.getSheetByName(SHEET_HISTORY) || ss.insertSheet(SHEET_HISTORY);
+  hist.getRange(1, 1, hist.getMaxRows(), Math.max(hist.getMaxColumns(), HISTORY_COLS.length)).setNumberFormat('@');
+  if (hist.getLastRow() === 0) {
+    hist.getRange(1, 1, 1, HISTORY_COLS.length).setValues([HISTORY_COLS]).setFontWeight('bold');
+    hist.setFrozenRows(1);
+  }
+
+  // 고객관리 탭 — 없으면 만들고 헤더 생성.
+  var cust = ss.getSheetByName(SHEET_CUSTOMER) || ss.insertSheet(SHEET_CUSTOMER);
+  if (cust.getLastRow() === 0) {
+    cust.getRange(1, 1, 1, CUSTOMER_COLS.length).setValues([CUSTOMER_COLS]).setFontWeight('bold');
+    cust.setFrozenRows(1);
+  }
 
   SpreadsheetApp.getUi().alert(
     '세팅 완료 ✅\n\n' +
@@ -187,8 +212,103 @@ function clearHanjinSheet() {
   var hanjin = ss.getSheetByName(SHEET_HANJIN);
   if (!hanjin) return;
   hanjin.clear();
+  hanjin.getRange(1, 1, hanjin.getMaxRows(), hanjin.getMaxColumns()).setNumberFormat('@');
   hanjin.getRange(1, 1, 1, HANJIN_COLS.length).setValues([HANJIN_COLS]).setFontWeight('bold');
   hanjin.setFrozenRows(1);
+}
+
+// ── 주문내역 누적: 네이버주문의 새 주문(상품주문번호 기준)만 주문내역 탭에 추가 ──
+function appendOrderHistory() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var naver = ss.getSheetByName(SHEET_NAVER);
+  if (!naver || naver.getLastRow() < 2) {
+    SpreadsheetApp.getUi().alert('"' + SHEET_NAVER + '" 탭에 주문 데이터가 없습니다.');
+    return;
+  }
+  var hist = ss.getSheetByName(SHEET_HISTORY) || ss.insertSheet(SHEET_HISTORY);
+  if (hist.getLastRow() === 0) {
+    hist.getRange(1, 1, 1, HISTORY_COLS.length).setValues([HISTORY_COLS]).setFontWeight('bold');
+    hist.setFrozenRows(1);
+  }
+  hist.getRange(1, 1, hist.getMaxRows(), Math.max(hist.getMaxColumns(), HISTORY_COLS.length)).setNumberFormat('@');
+
+  // 이미 기록된 상품주문번호 집합(중복 방지)
+  var seen = {};
+  if (hist.getLastRow() > 1) {
+    hist.getRange(2, 2, hist.getLastRow() - 1, 1).getValues().forEach(function (r) {
+      seen[('' + r[0]).trim()] = true;
+    });
+  }
+
+  var stamp = dateStamp();
+  var newRows = [];
+  readAsObjects(naver).forEach(function (r) {
+    var id = ('' + pick(r, NAVER_COLS.productOrderNo)).trim();
+    if (!id || seen[id]) return;
+    seen[id] = true;
+    newRows.push([
+      stamp, id,
+      pick(r, NAVER_COLS.orderDate),
+      pick(r, NAVER_COLS.receiver),
+      normalizePhone(pick(r, NAVER_COLS.receiverPhone)),
+      pick(r, NAVER_COLS.zipcode),
+      pick(r, NAVER_COLS.address),
+      pick(r, NAVER_COLS.productName),
+      pick(r, NAVER_COLS.option),
+      pick(r, NAVER_COLS.quantity),
+      pick(r, NAVER_COLS.deliveryMemo)
+    ]);
+  });
+  if (newRows.length) {
+    hist.getRange(hist.getLastRow() + 1, 1, newRows.length, HISTORY_COLS.length).setValues(newRows);
+  }
+  SpreadsheetApp.getUi().alert('주문내역에 ' + newRows.length + '건 추가됨 (중복 제외).\n' +
+    '"고객관리 갱신"을 누르면 고객별로 집계됩니다.');
+}
+
+// ── 고객관리 갱신: 주문내역을 수취인+전화 기준으로 집계 ──
+function updateCustomers() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var hist = ss.getSheetByName(SHEET_HISTORY);
+  if (!hist || hist.getLastRow() < 2) {
+    SpreadsheetApp.getUi().alert('"' + SHEET_HISTORY + '" 탭에 데이터가 없습니다.\n먼저 "주문내역에 누적하기"를 실행하세요.');
+    return;
+  }
+  var map = {}, order = [];
+  readAsObjects(hist).forEach(function (r) {
+    var name = ('' + (r['수취인명'] || '')).trim();
+    var phone = ('' + (r['전화번호'] || '')).trim();
+    if (!name && !phone) return;
+    var key = name + '|' + phone;
+    if (!map[key]) {
+      map[key] = { name: name, phone: phone, addr: '', cnt: 0, qty: 0, items: {}, first: '', last: '' };
+      order.push(key);
+    }
+    var c = map[key];
+    if (r['주소']) c.addr = r['주소'];
+    c.cnt += 1;
+    c.qty += parseInt(r['수량'], 10) || 0;
+    var item = ('' + (r['상품명'] || '')).trim();
+    if (item) c.items[item] = true;
+    var d = ('' + (r['주문일시'] || '')).trim();
+    if (d) {
+      if (!c.first || d < c.first) c.first = d;
+      if (!c.last  || d > c.last)  c.last = d;
+    }
+  });
+
+  var out = order.map(function (key) {
+    var c = map[key];
+    return [c.name, c.phone, c.addr, c.cnt, c.qty, Object.keys(c.items).join(', '), c.first, c.last];
+  });
+  out.sort(function (a, b) { return b[3] - a[3]; }); // 총주문건수 많은 순
+
+  var cust = ss.getSheetByName(SHEET_CUSTOMER) || ss.insertSheet(SHEET_CUSTOMER);
+  cust.clear();
+  cust.getRange(1, 1, 1, CUSTOMER_COLS.length).setValues([CUSTOMER_COLS]).setFontWeight('bold');
+  if (out.length) cust.getRange(2, 1, out.length, CUSTOMER_COLS.length).setValues(out);
+  cust.setFrozenRows(1);
+  SpreadsheetApp.getUi().alert('고객관리 갱신 완료 ✅  고객 ' + out.length + '명 집계.');
 }
 
 function buildHanjinRow(nrow) {
@@ -209,6 +329,7 @@ var COMPUTERS = {
   phone:  function (r) { return normalizePhone(pick(r, NAVER_COLS.receiverPhone)); },
   phone2: function (r) { return normalizePhone(pick(r, NAVER_COLS.receiverPhone2)); },
   itemName: function (r) {
+    if (r.__itemName) return r.__itemName.substring(0, 100); // 병합된 행: 이미 조립됨(수량 중복 방지)
     var name = (pick(r, NAVER_COLS.productName) || '').toString().trim();
     var opt  = (pick(r, NAVER_COLS.option) || '').toString().trim();
     var qty  = parseInt(pick(r, NAVER_COLS.quantity), 10) || 1;
@@ -241,9 +362,8 @@ function combineByReceiver(rows) {
   });
   return order.map(function (key) {
     var r = map[key];
-    r[NAVER_COLS.productName] = r.__items.join(' + ');
-    r[NAVER_COLS.option] = '';
-    r[NAVER_COLS.quantity] = r.__qty;
+    r.__itemName = r.__items.join(' + ');   // 품목명은 __itemName으로 (수량 중복 방지)
+    r[NAVER_COLS.quantity] = r.__qty;        // 내품수량 = 합산 수량
     return r;
   });
 }

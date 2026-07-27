@@ -26,6 +26,8 @@ function setupSheets() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
   var naver = ss.getSheetByName(SHEET_NAVER) || ss.insertSheet(SHEET_NAVER);
+  // 우편번호·전화번호가 날짜/숫자로 자동변환되지 않도록 텍스트 서식으로
+  naver.getRange(1, 1, naver.getMaxRows(), naver.getMaxColumns()).setNumberFormat('@');
   if (naver.getLastRow() === 0) {
     var naverHeaders = Object.keys(NAVER_COLS).map(function (k) { return NAVER_COLS[k]; });
     naver.getRange(1, 1, 1, naverHeaders.length).setValues([naverHeaders]).setFontWeight('bold');
@@ -34,6 +36,7 @@ function setupSheets() {
 
   var hanjin = ss.getSheetByName(SHEET_HANJIN) || ss.insertSheet(SHEET_HANJIN);
   hanjin.clear();
+  hanjin.getRange(1, 1, hanjin.getMaxRows(), hanjin.getMaxColumns()).setNumberFormat('@');
   hanjin.getRange(1, 1, 1, HANJIN_COLS.length).setValues([HANJIN_COLS]).setFontWeight('bold');
   hanjin.setFrozenRows(1);
 
@@ -178,6 +181,7 @@ var COMPUTERS = {
   },
   // 상품명 + 옵션 + (수량>1이면 x수량)  → 한 필드로
   itemName: function (r) {
+    if (r.__itemName) return r.__itemName.substring(0, 100); // 병합된 행: 이미 조립됨(수량 중복 방지)
     var name = (pick(r, NAVER_COLS.productName) || '').toString().trim();
     var opt  = (pick(r, NAVER_COLS.option) || '').toString().trim();
     var qty  = parseInt(pick(r, NAVER_COLS.quantity), 10) || 1;
@@ -215,9 +219,8 @@ function combineByReceiver(rows) {
 
   return order.map(function (key) {
     var r = map[key];
-    // 합쳐진 품목/수량을 네이버 컬럼 자리에 다시 넣어 buildHanjinRow가 쓰게 함
-    r[NAVER_COLS.productName] = r.__items.join(' + ');
-    r[NAVER_COLS.option] = '';
+    // 합쳐진 품목명은 __itemName으로(수량 중복 방지), 수량은 합산값
+    r.__itemName = r.__items.join(' + ');
     r[NAVER_COLS.quantity] = r.__qty;
     return r;
   });
