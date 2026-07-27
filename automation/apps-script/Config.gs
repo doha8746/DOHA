@@ -55,7 +55,7 @@ var MAPPING = {
   '받는분성명':      { from: 'receiver' },
   '받는분전화번호':  { fn: 'phone' },
   '받는분기타연락처':{ fn: 'phone2' },
-  '받는분우편번호':  { from: 'zipcode' },
+  '받는분우편번호':  { fn: 'zip' },
   '받는분주소':      { from: 'address' },
   '품목명':          { fn: 'itemName' },   // 상품명 + 옵션 합침
   '내품수량':        { from: 'quantity' },

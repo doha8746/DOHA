@@ -17,10 +17,19 @@ var SHEET_HANJIN   = '한진송장';
 var SHEET_CONFIG   = '_설정';
 var SHEET_HISTORY  = '주문내역';   // 그동안 받은 주문 누적 로그
 var SHEET_CUSTOMER = '고객관리';   // 고객별 집계(단골 관리)
+var SHEET_MSG      = '문자관리';   // 발송 후 안부/재구매 문자 대상·문구
 
-// 주문내역/고객관리 탭 열 구성
-var HISTORY_COLS  = ['기록일시','상품주문번호','주문일시','수취인명','전화번호','우편번호','주소','상품명','옵션','수량','배송메모'];
+// 탭 열 구성
+var HISTORY_COLS  = ['기록일시','상품주문번호','주문일시','발송일','수취인명','전화번호','우편번호','주소','상품명','옵션','수량','배송메모'];
 var CUSTOMER_COLS = ['수취인명','전화번호','최근주소','총주문건수','총수량','구매상품','첫주문일','최근주문일'];
+var MSG_COLS      = ['수취인명','전화번호','상품','발송일','안부예정일(+4)','안부상태','안부문구','재구매예정일(+10)','재구매상태','재구매문구'];
+
+// ── 문자 발송 설정 (여기만 고치면 됨) ──
+var FOLLOWUP_HELLO_DAYS      = 4;   // 발송 후 며칠에 안부 문자
+var FOLLOWUP_REPURCHASE_DAYS = 10;  // 발송 후 며칠에 재구매 문자
+// {name} 자리에 수취인명이 들어갑니다. 문구는 자유롭게 바꾸세요.
+var MSG_HELLO      = '안녕하세요 {name}님, 도하커피입니다 :) 주문하신 원두 맛있게 즐기고 계신가요? 혹시 불편한 점 있으면 편하게 말씀해 주세요. 오늘도 향기로운 하루 보내세요 ☕';
+var MSG_REPURCHASE = '{name}님, 도하커피예요 :) 원두가 슬슬 떨어질 때쯤이죠? 주문해 주시면 그날 볶은 신선한 원두로 정성껏 보내드릴게요. 오늘도 좋은 하루 되세요 ☕';
 
 // 네이버 주문 엑셀의 헤더 이름 (열 순서는 상관없음 — 이름으로 찾음)
 var NAVER_COLS = {
@@ -36,7 +45,8 @@ var NAVER_COLS = {
   option:         '옵션정보',
   quantity:       '수량',
   deliveryMemo:   '배송메세지',
-  orderDate:      '주문일시'
+  orderDate:      '주문일시',
+  shipDate:       '발송일'
 };
 
 // 한진 원클릭 대량접수 양식 헤더 (순서 = 출력 순서)
@@ -58,7 +68,7 @@ var MAPPING = {
   '받는분성명':      { from: 'receiver' },
   '받는분전화번호':  { fn: 'phone' },
   '받는분기타연락처':{ fn: 'phone2' },
-  '받는분우편번호':  { from: 'zipcode' },
+  '받는분우편번호':  { fn: 'zip' },
   '받는분주소':      { from: 'address' },
   '품목명':          { fn: 'itemName' },
   '내품수량':        { from: 'quantity' },
@@ -80,6 +90,7 @@ function onOpen() {
     .addSeparator()
     .addItem('주문내역에 누적하기', 'appendOrderHistory')
     .addItem('고객관리 갱신', 'updateCustomers')
+    .addItem('문자관리 갱신 (오늘 보낼 문자)', 'updateMessagePlan')
     .addSeparator()
     .addItem('지금 즉시 다시 변환', 'convertNaverToHanjin')
     .addItem('한진송장 탭 비우기', 'clearHanjinSheet')
@@ -126,6 +137,13 @@ function setupSheets() {
   if (cust.getLastRow() === 0) {
     cust.getRange(1, 1, 1, CUSTOMER_COLS.length).setValues([CUSTOMER_COLS]).setFontWeight('bold');
     cust.setFrozenRows(1);
+  }
+
+  // 문자관리 탭 — 없으면 만들고 헤더 생성.
+  var msg = ss.getSheetByName(SHEET_MSG) || ss.insertSheet(SHEET_MSG);
+  if (msg.getLastRow() === 0) {
+    msg.getRange(1, 1, 1, MSG_COLS.length).setValues([MSG_COLS]).setFontWeight('bold');
+    msg.setFrozenRows(1);
   }
 
   SpreadsheetApp.getUi().alert(
@@ -249,9 +267,10 @@ function appendOrderHistory() {
     newRows.push([
       stamp, id,
       pick(r, NAVER_COLS.orderDate),
+      pick(r, NAVER_COLS.shipDate),
       pick(r, NAVER_COLS.receiver),
       normalizePhone(pick(r, NAVER_COLS.receiverPhone)),
-      pick(r, NAVER_COLS.zipcode),
+      normalizeZip(pick(r, NAVER_COLS.zipcode)),
       pick(r, NAVER_COLS.address),
       pick(r, NAVER_COLS.productName),
       pick(r, NAVER_COLS.option),
@@ -311,6 +330,77 @@ function updateCustomers() {
   SpreadsheetApp.getUi().alert('고객관리 갱신 완료 ✅  고객 ' + out.length + '명 집계.');
 }
 
+// ── 문자관리 갱신: 발송일 기준 안부(+4)/재구매(+10) 대상·문구 정리 ──
+function updateMessagePlan() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var hist = ss.getSheetByName(SHEET_HISTORY);
+  if (!hist || hist.getLastRow() < 2) {
+    SpreadsheetApp.getUi().alert('"' + SHEET_HISTORY + '" 탭에 데이터가 없습니다.\n먼저 "주문내역에 누적하기"를 실행하세요.');
+    return;
+  }
+  var today = ymd(new Date());
+  var map = {}, order = [];
+  readAsObjects(hist).forEach(function (r) {
+    var ship = parseDateLoose(r['발송일']);
+    if (!ship) return;   // 아직 발송 안 된 주문은 제외
+    var name  = ('' + (r['수취인명'] || '')).trim();
+    var phone = ('' + (r['전화번호'] || '')).trim();
+    var key = name + '|' + phone + '|' + ymd(ship);
+    if (!map[key]) { map[key] = { name: name, phone: phone, ship: ship, items: {} }; order.push(key); }
+    var item = ('' + (r['상품명'] || '')).trim();
+    if (item) map[key].items[item] = true;
+  });
+
+  var rows = order.map(function (key) {
+    var c = map[key];
+    var helloDue = ymd(addDays(c.ship, FOLLOWUP_HELLO_DAYS));
+    var repDue   = ymd(addDays(c.ship, FOLLOWUP_REPURCHASE_DAYS));
+    var products = Object.keys(c.items).join(', ');
+    return {
+      todayHit: (helloDue === today || repDue === today),
+      row: [
+        c.name, c.phone, products, ymd(c.ship),
+        helloDue, followStatus(helloDue, today), MSG_HELLO.replace('{name}', c.name),
+        repDue,   followStatus(repDue, today),   MSG_REPURCHASE.replace('{name}', c.name)
+      ]
+    };
+  });
+  // 오늘 보낼 대상 먼저, 그다음 발송일 최신순
+  rows.sort(function (a, b) {
+    if (a.todayHit !== b.todayHit) return a.todayHit ? -1 : 1;
+    return a.row[3] < b.row[3] ? 1 : -1;
+  });
+  var out = rows.map(function (x) { return x.row; });
+  var todayCount = rows.filter(function (x) { return x.todayHit; }).length;
+
+  var msg = ss.getSheetByName(SHEET_MSG) || ss.insertSheet(SHEET_MSG);
+  msg.clear();
+  msg.getRange(1, 1, 1, MSG_COLS.length).setValues([MSG_COLS]).setFontWeight('bold');
+  if (out.length) msg.getRange(2, 1, out.length, MSG_COLS.length).setValues(out);
+  msg.setFrozenRows(1);
+
+  SpreadsheetApp.getUi().alert('문자관리 갱신 완료 ✅\n오늘 보낼 문자 대상: ' + todayCount + '명\n' +
+    '(안부상태·재구매상태 칸에 "📮 오늘 보내기"로 표시된 사람에게 문구를 복사해 보내세요.)');
+}
+
+// 상태: 오늘이면 보내기, 지났으면 완료(지남), 아직이면 대기
+function followStatus(dueYmd, todayYmd) {
+  if (dueYmd === todayYmd) return '📮 오늘 보내기';
+  return dueYmd < todayYmd ? '완료(지남)' : '대기';
+}
+
+// 느슨한 날짜 파싱: "2026/07/27", "2026-07-27", "2026.7.27", Date 모두 처리
+function parseDateLoose(v) {
+  if (!v && v !== 0) return null;
+  if (Object.prototype.toString.call(v) === '[object Date]') return v;
+  var m = ('' + v).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+  if (!m) return null;
+  return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+}
+
+function addDays(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function ymd(d) { return Utilities.formatDate(d, 'Asia/Seoul', 'yyyy-MM-dd'); }
+
 function buildHanjinRow(nrow) {
   var receiver = pick(nrow, NAVER_COLS.receiver);
   var address  = pick(nrow, NAVER_COLS.address);
@@ -328,6 +418,7 @@ function buildHanjinRow(nrow) {
 var COMPUTERS = {
   phone:  function (r) { return normalizePhone(pick(r, NAVER_COLS.receiverPhone)); },
   phone2: function (r) { return normalizePhone(pick(r, NAVER_COLS.receiverPhone2)); },
+  zip:    function (r) { return normalizeZip(pick(r, NAVER_COLS.zipcode)); },
   itemName: function (r) {
     if (r.__itemName) return r.__itemName.substring(0, 100); // 병합된 행: 이미 조립됨(수량 중복 방지)
     var name = (pick(r, NAVER_COLS.productName) || '').toString().trim();
@@ -404,6 +495,14 @@ function normalizePhone(v) {
     return d.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   }
   return d;
+}
+
+// 우편번호 정규화: 숫자만 뽑아 5자리 미만이면 앞에 0을 채움(03968 등 앞자리 0 복구)
+function normalizeZip(v) {
+  var s = (v === null || v === undefined) ? '' : ('' + v).trim();
+  var d = s.replace(/[^0-9]/g, '');
+  if (d.length >= 1 && d.length < 5) d = ('00000' + d).slice(-5);
+  return d || s;
 }
 
 function csvEscape(v) {

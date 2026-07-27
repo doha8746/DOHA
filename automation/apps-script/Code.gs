@@ -179,6 +179,9 @@ var COMPUTERS = {
   phone2: function (r) {
     return normalizePhone(pick(r, NAVER_COLS.receiverPhone2));
   },
+  zip: function (r) {
+    return normalizeZip(pick(r, NAVER_COLS.zipcode));
+  },
   // 상품명 + 옵션 + (수량>1이면 x수량)  → 한 필드로
   itemName: function (r) {
     if (r.__itemName) return r.__itemName.substring(0, 100); // 병합된 행: 이미 조립됨(수량 중복 방지)
@@ -272,6 +275,14 @@ function normalizePhone(v) {
     return d.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   }
   return d; // 애매하면 숫자 그대로
+}
+
+// 우편번호 정규화: 숫자만 뽑아 5자리 미만이면 앞에 0을 채움(앞자리 0 복구)
+function normalizeZip(v) {
+  var s = (v === null || v === undefined) ? '' : ('' + v).trim();
+  var d = s.replace(/[^0-9]/g, '');
+  if (d.length >= 1 && d.length < 5) d = ('00000' + d).slice(-5);
+  return d || s;
 }
 
 function csvEscape(v) {

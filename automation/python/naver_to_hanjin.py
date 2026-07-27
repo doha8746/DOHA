@@ -81,6 +81,15 @@ def normalize_phone(v: str) -> str:
     return d
 
 
+def normalize_zip(v) -> str:
+    """우편번호: 숫자만 뽑아 5자리 미만이면 앞에 0을 채움(앞자리 0 복구)."""
+    s = "" if v is None else str(v).strip()
+    d = re.sub(r"[^0-9]", "", s)
+    if 1 <= len(d) < 5:
+        d = d.zfill(5)
+    return d or s
+
+
 def item_label(name: str, opt: str, qty) -> str:
     try:
         q = int(float(qty))
@@ -150,6 +159,8 @@ def convert(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
             return normalize_phone(r["phone"])
         if fn == "phone2":
             return normalize_phone(r["phone2"])
+        if fn == "zip":
+            return normalize_zip(r["zipcode"])
         if fn == "item_name":
             if "_item_name" in r:
                 return r["_item_name"][:100]
