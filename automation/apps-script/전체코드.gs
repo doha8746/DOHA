@@ -80,6 +80,8 @@ function setupSheets() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
   var naver = ss.getSheetByName(SHEET_NAVER) || ss.insertSheet(SHEET_NAVER);
+  // 우편번호·전화번호가 날짜/숫자로 자동변환되지 않도록 전체를 텍스트 서식으로
+  naver.getRange(1, 1, naver.getMaxRows(), naver.getMaxColumns()).setNumberFormat('@');
   if (naver.getLastRow() === 0) {
     var naverHeaders = Object.keys(NAVER_COLS).map(function (k) { return NAVER_COLS[k]; });
     naver.getRange(1, 1, 1, naverHeaders.length).setValues([naverHeaders]).setFontWeight('bold');
@@ -88,6 +90,8 @@ function setupSheets() {
 
   var hanjin = ss.getSheetByName(SHEET_HANJIN) || ss.insertSheet(SHEET_HANJIN);
   hanjin.clear();
+  // 한진송장도 텍스트 서식(우편번호 앞 0 유지, 날짜 변환 방지)
+  hanjin.getRange(1, 1, hanjin.getMaxRows(), hanjin.getMaxColumns()).setNumberFormat('@');
   hanjin.getRange(1, 1, 1, HANJIN_COLS.length).setValues([HANJIN_COLS]).setFontWeight('bold');
   hanjin.setFrozenRows(1);
 
