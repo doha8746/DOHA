@@ -118,6 +118,7 @@ def convert(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         if not receiver and not address:
             continue  # 빈 줄
         records.append({
+            "order_no": get(row, df, nc, "order_no"),
             "receiver": receiver,
             "address": address,
             "phone": get(row, df, nc, "receiver_phone"),
