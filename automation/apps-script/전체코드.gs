@@ -94,7 +94,7 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('택배자동화')
     .addItem('① 초기 시트 세팅', 'setupSheets')
-    .addItem('한진양식 CSV 다운로드', 'downloadHanjinCsv')
+    .addItem('한진양식 엑셀 다운로드', 'downloadHanjinExcel')
     .addSeparator()
     .addItem('주문내역에 누적하기', 'appendOrderHistory')
     .addItem('고객관리 갱신', 'updateCustomers')
@@ -227,6 +227,39 @@ function downloadHanjinCsv() {
     '<p style="color:#888;font-size:12px">다운로드 후 한진 원클릭 택배 &gt; 대량접수에 업로드하세요.</p>';
   SpreadsheetApp.getUi().showModalDialog(
     HtmlService.createHtmlOutput(html).setWidth(380).setHeight(160), '한진양식 CSV 다운로드');
+}
+
+// ── 한진송장 탭을 "엑셀(.xlsx)" 파일로 다운로드 (한진 대량접수 업로드용) ──
+function downloadHanjinExcel() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var hanjin = ss.getSheetByName(SHEET_HANJIN);
+  if (!hanjin || hanjin.getLastRow() < 2) {
+    SpreadsheetApp.getUi().alert('먼저 변환을 실행하세요. (한진송장 데이터 없음)');
+    return;
+  }
+  var data = hanjin.getRange(1, 1, hanjin.getLastRow(), HANJIN_COLS.length).getValues();
+  var fname = '한진송장_' + dateStamp();
+
+  // 한진송장 데이터만 담은 임시 스프레드시트 → xlsx로 내보내기 → 임시본 삭제
+  var temp = SpreadsheetApp.create(fname);
+  var ts = temp.getSheets()[0];
+  var rng = ts.getRange(1, 1, data.length, HANJIN_COLS.length);
+  rng.setNumberFormat('@');          // 우편번호 앞 0 유지
+  rng.setValues(data);
+  SpreadsheetApp.flush();
+
+  var id = temp.getId();
+  var url = 'https://docs.google.com/spreadsheets/d/' + id + '/export?format=xlsx';
+  var resp = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() } });
+  var blob = resp.getBlob().setName(fname + '.xlsx');
+  var file = DriveApp.createFile(blob);
+  DriveApp.getFileById(id).setTrashed(true);   // 임시 스프레드시트 정리
+
+  var html = '<p>엑셀 파일이 만들어졌습니다.</p>' +
+    '<p><a href="' + file.getUrl() + '" target="_blank">👉 엑셀(.xlsx) 열기 / 다운로드</a></p>' +
+    '<p style="color:#888;font-size:12px">다운로드 후 한진 원클릭 택배 &gt; 대량접수에 업로드하세요.</p>';
+  SpreadsheetApp.getUi().showModalDialog(
+    HtmlService.createHtmlOutput(html).setWidth(400).setHeight(170), '한진양식 엑셀 다운로드');
 }
 
 function clearHanjinSheet() {
