@@ -124,13 +124,8 @@ function setupSheets() {
     .setFontColor('#888888');
   cfg.setColumnWidth(1, 220);
 
-  // 주문내역(누적 로그) 탭 — 없으면 만들고 헤더 생성. 있으면 기존 데이터 보존.
-  var hist = ss.getSheetByName(SHEET_HISTORY) || ss.insertSheet(SHEET_HISTORY);
-  hist.getRange(1, 1, hist.getMaxRows(), Math.max(hist.getMaxColumns(), HISTORY_COLS.length)).setNumberFormat('@');
-  if (hist.getLastRow() === 0) {
-    hist.getRange(1, 1, 1, HISTORY_COLS.length).setValues([HISTORY_COLS]).setFontWeight('bold');
-    hist.setFrozenRows(1);
-  }
+  // 주문내역(누적 로그) 탭 — 헤더가 현재 버전과 다르면 자동 초기화(칸 밀림 방지)
+  ensureHistorySheet(ss);
 
   // 고객관리 탭 — 없으면 만들고 헤더 생성.
   var cust = ss.getSheetByName(SHEET_CUSTOMER) || ss.insertSheet(SHEET_CUSTOMER);
@@ -235,6 +230,24 @@ function clearHanjinSheet() {
   hanjin.setFrozenRows(1);
 }
 
+// 주문내역 탭의 헤더가 현재 버전(HISTORY_COLS)과 다르면 초기화(칸 밀림 자동 복구)
+function ensureHistorySheet(ss) {
+  var hist = ss.getSheetByName(SHEET_HISTORY) || ss.insertSheet(SHEET_HISTORY);
+  var ok = false;
+  if (hist.getLastRow() >= 1) {
+    var hdr = hist.getRange(1, 1, 1, HISTORY_COLS.length).getValues()[0]
+      .map(function (x) { return ('' + x).trim(); });
+    ok = hdr.join('|') === HISTORY_COLS.join('|');
+  }
+  if (!ok) {
+    hist.clear();
+    hist.getRange(1, 1, 1, HISTORY_COLS.length).setValues([HISTORY_COLS]).setFontWeight('bold');
+    hist.setFrozenRows(1);
+  }
+  hist.getRange(1, 1, hist.getMaxRows(), Math.max(hist.getMaxColumns(), HISTORY_COLS.length)).setNumberFormat('@');
+  return hist;
+}
+
 // ── 주문내역 누적: 네이버주문의 새 주문(상품주문번호 기준)만 주문내역 탭에 추가 ──
 function appendOrderHistory() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -243,12 +256,7 @@ function appendOrderHistory() {
     SpreadsheetApp.getUi().alert('"' + SHEET_NAVER + '" 탭에 주문 데이터가 없습니다.');
     return;
   }
-  var hist = ss.getSheetByName(SHEET_HISTORY) || ss.insertSheet(SHEET_HISTORY);
-  if (hist.getLastRow() === 0) {
-    hist.getRange(1, 1, 1, HISTORY_COLS.length).setValues([HISTORY_COLS]).setFontWeight('bold');
-    hist.setFrozenRows(1);
-  }
-  hist.getRange(1, 1, hist.getMaxRows(), Math.max(hist.getMaxColumns(), HISTORY_COLS.length)).setNumberFormat('@');
+  var hist = ensureHistorySheet(ss);
 
   // 이미 기록된 상품주문번호 집합(중복 방지)
   var seen = {};
