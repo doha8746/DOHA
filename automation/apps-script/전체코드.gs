@@ -18,6 +18,7 @@ var SHEET_CONFIG   = '_설정';
 var SHEET_HISTORY  = '주문내역';   // 그동안 받은 주문 누적 로그
 var SHEET_CUSTOMER = '고객관리';   // 고객별 집계(단골 관리)
 var SHEET_MSG      = '문자관리';   // 발송 후 안부/재구매 문자 대상·문구
+var SHEET_ROAST    = '로스팅집계'; // 오늘 주문의 원두별 수량 합계(로스팅 준비)
 
 // 탭 열 구성
 var HISTORY_COLS  = ['기록일시','주문번호','주문일시','발송일','수취인명','전화번호','우편번호','주소','상품명','수량','배송메모'];
@@ -91,6 +92,7 @@ function onOpen() {
     .addItem('주문내역에 누적하기', 'appendOrderHistory')
     .addItem('고객관리 갱신', 'updateCustomers')
     .addItem('문자관리 갱신 (오늘 보낼 문자)', 'updateMessagePlan')
+    .addItem('로스팅 집계 (오늘 볶을 원두)', 'updateRoastingPlan')
     .addSeparator()
     .addItem('지금 즉시 다시 변환', 'convertNaverToHanjin')
     .addItem('한진송장 탭 비우기', 'clearHanjinSheet')
@@ -401,6 +403,42 @@ function updateMessagePlan() {
 
   SpreadsheetApp.getUi().alert('문자관리 갱신 완료 ✅\n오늘 보낼 문자 대상: ' + todayCount + '명\n' +
     '(안부상태·재구매상태 칸에 "📮 오늘 보내기"로 표시된 사람에게 문구를 복사해 보내세요.)');
+}
+
+// ── 로스팅 집계: 네이버주문(오늘 주문)을 원두(상품+옵션)별 수량 합계로 ──
+function updateRoastingPlan() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var naver = ss.getSheetByName(SHEET_NAVER);
+  if (!naver || naver.getLastRow() < 2) {
+    SpreadsheetApp.getUi().alert('"' + SHEET_NAVER + '" 탭에 주문 데이터가 없습니다.');
+    return;
+  }
+  var map = {}, order = [];
+  readAsObjects(naver).forEach(function (r) {
+    var name = ('' + pick(r, NAVER_COLS.productName)).trim();
+    if (!name) return;
+    var opt = ('' + pick(r, NAVER_COLS.option)).trim();
+    var qty = parseInt(pick(r, NAVER_COLS.quantity), 10) || 1;
+    var key = name + '|' + opt;
+    if (!map[key]) { map[key] = { name: name, opt: opt, qty: 0 }; order.push(key); }
+    map[key].qty += qty;
+  });
+  var rows = order.map(function (k) { return [map[k].name, map[k].opt, map[k].qty]; });
+  rows.sort(function (a, b) { return b[2] - a[2]; });   // 수량 많은 순
+  var totalBags = rows.reduce(function (s, r) { return s + r[2]; }, 0);
+  var today = ymd(new Date());
+
+  var sh = ss.getSheetByName(SHEET_ROAST) || ss.insertSheet(SHEET_ROAST);
+  sh.clear();
+  sh.getRange('A1').setValue('로스팅 집계  ·  ' + today).setFontWeight('bold').setFontSize(12);
+  sh.getRange(2, 1, 1, 3).setValues([['상품명', '옵션', '수량']]).setFontWeight('bold');
+  if (rows.length) sh.getRange(3, 1, rows.length, 3).setValues(rows);
+  sh.getRange(3 + rows.length, 1).setValue('합계(봉)').setFontWeight('bold');
+  sh.getRange(3 + rows.length, 3).setValue(totalBags).setFontWeight('bold');
+  sh.setFrozenRows(2);
+  sh.autoResizeColumns(1, 3);
+
+  SpreadsheetApp.getUi().alert('로스팅 집계 완료 ✅  (' + today + ')\n원두 ' + rows.length + '종 · 총 ' + totalBags + '봉');
 }
 
 // 상태: 오늘이면 보내기, 지났으면 완료(지남), 아직이면 대기
