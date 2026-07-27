@@ -20,7 +20,7 @@ var SHEET_CUSTOMER = '고객관리';   // 고객별 집계(단골 관리)
 var SHEET_MSG      = '문자관리';   // 발송 후 안부/재구매 문자 대상·문구
 
 // 탭 열 구성
-var HISTORY_COLS  = ['기록일시','상품주문번호','주문일시','발송일','수취인명','전화번호','우편번호','주소','상품명','옵션','수량','배송메모'];
+var HISTORY_COLS  = ['기록일시','주문번호','주문일시','발송일','수취인명','전화번호','우편번호','주소','상품명','수량','배송메모'];
 var CUSTOMER_COLS = ['수취인명','전화번호','최근주소','총주문건수','총수량','구매상품','첫주문일','최근주문일'];
 var MSG_COLS      = ['수취인명','전화번호','상품','발송일','안부예정일(+4)','안부상태','안부문구','재구매예정일(+10)','재구매상태','재구매문구'];
 
@@ -258,7 +258,7 @@ function appendOrderHistory() {
   }
   var hist = ensureHistorySheet(ss);
 
-  // 이미 기록된 상품주문번호 집합(중복 방지)
+  // 이미 기록된 주문번호 집합(중복 방지)
   var seen = {};
   if (hist.getLastRow() > 1) {
     hist.getRange(2, 2, hist.getLastRow() - 1, 1).getValues().forEach(function (r) {
@@ -266,30 +266,42 @@ function appendOrderHistory() {
     });
   }
 
+  // 같은 주문번호(=같은 주문자·한 주문)의 여러 상품을 한 줄로 합침
+  var groups = {}, order = [];
+  readAsObjects(naver).forEach(function (r) {
+    var ono = ('' + pick(r, NAVER_COLS.orderNo)).trim();
+    if (!ono) return;
+    if (!groups[ono]) { groups[ono] = { first: r, items: [], qty: 0 }; order.push(ono); }
+    var name = ('' + pick(r, NAVER_COLS.productName)).trim();
+    var opt  = ('' + pick(r, NAVER_COLS.option)).trim();
+    var qty  = parseInt(pick(r, NAVER_COLS.quantity), 10) || 1;
+    groups[ono].items.push(name + (opt ? ' (' + opt + ')' : '') + (qty > 1 ? ' x' + qty : ''));
+    groups[ono].qty += qty;
+  });
+
   var stamp = dateStamp();
   var newRows = [];
-  readAsObjects(naver).forEach(function (r) {
-    var id = ('' + pick(r, NAVER_COLS.productOrderNo)).trim();
-    if (!id || seen[id]) return;
-    seen[id] = true;
+  order.forEach(function (ono) {
+    if (seen[ono]) return;
+    seen[ono] = true;
+    var g = groups[ono], r = g.first;
     newRows.push([
-      stamp, id,
+      stamp, ono,
       pick(r, NAVER_COLS.orderDate),
       pick(r, NAVER_COLS.shipDate),
       pick(r, NAVER_COLS.receiver),
       normalizePhone(pick(r, NAVER_COLS.receiverPhone)),
       normalizeZip(pick(r, NAVER_COLS.zipcode)),
       pick(r, NAVER_COLS.address),
-      pick(r, NAVER_COLS.productName),
-      pick(r, NAVER_COLS.option),
-      pick(r, NAVER_COLS.quantity),
+      g.items.join(' + '),
+      g.qty,
       pick(r, NAVER_COLS.deliveryMemo)
     ]);
   });
   if (newRows.length) {
     hist.getRange(hist.getLastRow() + 1, 1, newRows.length, HISTORY_COLS.length).setValues(newRows);
   }
-  SpreadsheetApp.getUi().alert('주문내역에 ' + newRows.length + '건 추가됨 (중복 제외).\n' +
+  SpreadsheetApp.getUi().alert('주문내역에 ' + newRows.length + '건(주문 단위로 합침, 중복 제외) 추가됨.\n' +
     '"고객관리 갱신"을 누르면 고객별로 집계됩니다.');
 }
 
