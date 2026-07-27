@@ -24,7 +24,7 @@ var NAVER_COLS = {
   receiverPhone:  '수취인연락처1',
   receiverPhone2: '수취인연락처2',
   zipcode:        '우편번호',
-  address:        '배송지',          // 통합 배송지(도로명+상세)
+  address:        '통합배송지',       // 네이버 실제 헤더: 도로명+상세 합쳐진 전체 주소
   productName:    '상품명',
   option:         '옵션정보',
   quantity:       '수량',
