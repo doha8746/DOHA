@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>도하커피 명함 · 인스타그램</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
+<style>
+  :root{
+    --black:#000000;
+    --white:#FFFFFF;
+    --brand:#7D2D36;
+    --font:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#101010;font-family:var(--font);-webkit-font-smoothing:antialiased;
+       display:flex;flex-direction:column;align-items:center;gap:40px;padding:40px 0}
+
+  /* 캔버스 격리: #feed45 / #square / #story 해시로 1개만 렌더 */
+  body[data-only]{display:block;gap:0;padding:0;background:#000}
+  body[data-only] .wrap{display:none}
+  body[data-only="feed45"] #w-feed45,
+  body[data-only="square"] #w-square,
+  body[data-only="story"]  #w-story{display:block}
+  body[data-only] .cap{display:none}
+
+  .cap{color:#777;font-size:13px;letter-spacing:.18em;text-align:center;margin-bottom:10px;text-transform:uppercase}
+
+  .wrap{flex:none}
+  .canvas{position:relative;overflow:hidden;background:var(--black);color:var(--white);
+          display:flex;flex-direction:column;flex:none}
+  #feed45{width:1080px;height:1350px}
+  #square{width:1080px;height:1080px}
+  #story {width:1080px;height:1920px}
+
+  /* ── 상단: 후킹 존 (검정) ───────────────────────── */
+  .hook{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:space-between;
+        padding:88px 92px 72px}
+  #story .hook{padding:300px 92px 80px}     /* 스토리 상단 UI 세이프존 */
+
+  .mark{display:flex;align-items:baseline;gap:22px}
+  .mark .kr{font-size:40px;font-weight:800;letter-spacing:.02em}
+  .mark .en{font-size:22px;font-weight:500;letter-spacing:.42em;color:rgba(255,255,255,.4);text-transform:uppercase}
+
+  .hero .l1{font-size:104px;font-weight:700;letter-spacing:-.035em;line-height:1.05}
+  .hero .l2{display:flex;align-items:center;gap:26px;margin-top:10px}
+  .hero .l2 .t{font-size:170px;font-weight:900;letter-spacing:-.05em;line-height:.96}
+  .hero .l2 .chip{display:inline-flex;align-items:center;justify-content:center;
+    background:var(--brand);color:var(--white);
+    font-size:170px;font-weight:900;letter-spacing:-.02em;line-height:.96;
+    padding:26px 36px 40px;border-radius:14px}
+  .hero .claim{margin-top:56px;font-size:38px;font-weight:400;line-height:1.62;
+    letter-spacing:-.02em;color:rgba(255,255,255,.6)}
+  .hero .claim b{color:var(--white);font-weight:700}
+
+  .credline{display:flex;align-items:center;gap:20px;font-size:26px;letter-spacing:.02em;
+    color:rgba(255,255,255,.38)}
+  .credline b{color:var(--white);font-weight:700}
+  .credline s{width:52px;height:3px;background:var(--brand);display:block;text-decoration:none}
+
+  /* ── 하단: 정보 존 (흰색) ───────────────────────── */
+  .info{flex:none;background:var(--white);color:var(--black);padding:56px 92px 60px;
+        border-top:14px solid var(--brand);
+        display:flex;justify-content:space-between;align-items:flex-start;gap:56px}
+  #story .info{padding-bottom:280px}        /* 스토리 하단 UI 세이프존 */
+
+  .who .name{font-size:68px;font-weight:900;letter-spacing:-.045em;line-height:1}
+  .who .role{margin-top:16px;font-size:29px;font-weight:500;letter-spacing:-.02em;color:rgba(0,0,0,.6)}
+  .who .badge{margin-top:22px;display:inline-flex;align-items:center;gap:12px;
+    border:3px solid var(--brand);border-radius:8px;padding:11px 18px;
+    font-size:25px;font-weight:700;letter-spacing:-.02em;color:var(--brand)}
+  .who .badge span{opacity:.4;font-weight:400}
+
+  .reach{display:flex;flex-direction:column;gap:14px;padding-top:6px;min-width:360px}
+  .reach div{display:flex;align-items:baseline;gap:18px;font-size:29px;letter-spacing:-.02em}
+  .reach k{flex:none;width:96px;font-size:22px;font-weight:700;letter-spacing:.1em;
+    color:var(--brand);text-transform:uppercase}
+
+  /* 정사각형은 세로가 좁으니 압축 */
+  #square .hook{padding:76px 92px 60px}
+  #square .hero .l1{font-size:92px}
+  #square .hero .l2 .t,#square .hero .l2 .chip{font-size:150px}
+  #square .hero .claim{margin-top:44px;font-size:35px}
+  #square .info{padding:50px 92px 54px}
+  #square .who .name{font-size:62px}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 1080 × 1350 · 피드 4:5 ══════════ -->
+<div class="wrap" id="w-feed45">
+  <div class="cap">Feed 4:5 — 1080 × 1350</div>
+  <div class="canvas" id="feed45">
+    <div class="hook">
+      <div class="mark"><span class="kr">도하커피</span><span class="en">Doha Coffee</span></div>
+      <div class="hero">
+        <div class="l1">커피는</div>
+        <div class="l2"><span class="t">오로지</span><span class="chip">맛</span></div>
+        <div class="claim">달고나 같은 <b>커피 오리지널 단맛</b>을<br>감이 아니라 <b>근거</b>로 굽고, 내립니다.</div>
+      </div>
+      <div class="credline"><s></s><span><b>8년</b> · <b>800명+</b> 교육 · 전남 나주 로스터리</span></div>
+    </div>
+    <div class="info">
+      <div class="who">
+        <div class="name">［ 이 름 ］</div>
+        <div class="role">로스터 · 바리스타 · 커피 클래스 강사</div>
+        <div class="badge">국가자격 평생교육사 <span>|</span> 바리스타</div>
+      </div>
+      <div class="reach">
+        <div><k>Insta</k>@［ 계정 ］</div>
+        <div><k>Tel</k>010-0000-0000</div>
+        <div><k>Store</k>전남 나주 ［ 주소 ］</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 1080 × 1080 · 피드 1:1 ══════════ -->
+<div class="wrap" id="w-square">
+  <div class="cap">Feed 1:1 — 1080 × 1080</div>
+  <div class="canvas" id="square">
+    <div class="hook">
+      <div class="mark"><span class="kr">도하커피</span><span class="en">Doha Coffee</span></div>
+      <div class="hero">
+        <div class="l1">커피는</div>
+        <div class="l2"><span class="t">오로지</span><span class="chip">맛</span></div>
+        <div class="claim">달고나 같은 <b>커피 오리지널 단맛</b>을<br>감이 아니라 <b>근거</b>로 굽고, 내립니다.</div>
+      </div>
+      <div class="credline"><s></s><span><b>8년</b> · <b>800명+</b> 교육 · 전남 나주 로스터리</span></div>
+    </div>
+    <div class="info">
+      <div class="who">
+        <div class="name">［ 이 름 ］</div>
+        <div class="role">로스터 · 바리스타 · 커피 클래스 강사</div>
+        <div class="badge">국가자격 평생교육사 <span>|</span> 바리스타</div>
+      </div>
+      <div class="reach">
+        <div><k>Insta</k>@［ 계정 ］</div>
+        <div><k>Tel</k>010-0000-0000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 1080 × 1920 · 스토리 9:16 ══════════ -->
+<div class="wrap" id="w-story">
+  <div class="cap">Story 9:16 — 1080 × 1920</div>
+  <div class="canvas" id="story">
+    <div class="hook">
+      <div class="mark"><span class="kr">도하커피</span><span class="en">Doha Coffee</span></div>
+      <div class="hero">
+        <div class="l1">커피는</div>
+        <div class="l2"><span class="t">오로지</span><span class="chip">맛</span></div>
+        <div class="claim">달고나 같은 <b>커피 오리지널 단맛</b>을<br>감이 아니라 <b>근거</b>로 굽고, 내립니다.</div>
+      </div>
+      <div class="credline"><s></s><span><b>8년</b> · <b>800명+</b> 교육 · 전남 나주 로스터리</span></div>
+    </div>
+    <div class="info">
+      <div class="who">
+        <div class="name">［ 이 름 ］</div>
+        <div class="role">로스터 · 바리스타 · 커피 클래스 강사</div>
+        <div class="badge">국가자격 평생교육사 <span>|</span> 바리스타</div>
+      </div>
+      <div class="reach">
+        <div><k>Insta</k>@［ 계정 ］</div>
+        <div><k>Tel</k>010-0000-0000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var m = location.hash.slice(1);
+  if (m) document.body.setAttribute('data-only', m);
+</script>
+</body>
+</html>
