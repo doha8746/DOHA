@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>도하커피 명함</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    /* ── 브랜드 3색 (이 외의 색은 쓰지 않는다) ───────── */
+    --black:#000000;
+    --white:#FFFFFF;
+    --brand:#7D2D36;
+
+    --card-w:90mm; --card-h:50mm;
+    --bleed:3mm; --safe:5mm;
+    /* 본문 = 명조 / 로고 워드마크 = 산세리프(로고 원본 유지) */
+    --serif:"Noto Serif KR","본명조","Nanum Myeongjo","Apple SD Gothic Neo",serif;
+    --logo:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0A0A0A;color:var(--white);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+
+  /* ── 화면 보기용 래퍼 (인쇄 시 사라짐) ───────────── */
+  .stage{padding:40px 16px 64px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .stage h1{font-size:14px;font-weight:700;letter-spacing:.24em;color:var(--white);text-transform:uppercase}
+  .stage h1 em{font-style:normal;color:#B05663}
+  .stage p.sub{font-size:13px;font-weight:400;color:#8A8A8A;margin-bottom:20px;text-align:center;line-height:1.7}
+  .sheet{display:flex;flex-direction:column;align-items:center;gap:30px}
+  .label{font-size:11px;letter-spacing:.22em;color:#777;text-align:center;margin-bottom:8px}
+  .swatches{display:flex;gap:10px;margin-top:26px}
+  .sw{width:54px;text-align:center;font-size:9px;letter-spacing:.06em;color:#8A8A8A}
+  .sw i{display:block;height:26px;border-radius:3px;margin-bottom:5px;border:1px solid #2A2A2A}
+
+  /* ── 로고 락업 (심볼 위 · 워드마크 아래) ─────────── */
+  .lockup{display:inline-flex;flex-direction:column;align-items:center;gap:1.1mm;color:inherit}
+  .lockup svg{display:block;width:5.6mm;height:auto;fill:currentColor}
+  .lockup .wm{font-family:var(--logo);font-weight:500;font-size:1.75mm;
+    letter-spacing:.26em;text-indent:.26em;line-height:1;white-space:nowrap}
+  .lockup .wm sup{font-size:.55em;vertical-align:super;letter-spacing:0}
+
+  /* ── 명함 본체 ─────────────────────────────────── */
+  .card{position:relative;width:var(--card-w);height:var(--card-h);
+    overflow:hidden;border-radius:1.2mm;box-shadow:0 18px 48px rgba(0,0,0,.6)}
+
+  /* ═════════ 앞면 — 검정 바탕 ═════════ */
+  .front{background:var(--black);color:var(--white)}
+  .front::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2mm;background:var(--brand)}
+  .front .inner{position:relative;height:100%;z-index:2;
+    padding:4.4mm var(--safe) 4.4mm calc(var(--safe) + 2mm);
+    display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+
+  .hero .l1{font-size:5.4mm;font-weight:700;letter-spacing:-.01em;line-height:1.1;color:var(--white)}
+  .hero .l2{display:flex;align-items:center;gap:1.6mm;margin-top:.8mm}
+  .hero .l2 .t{font-size:8.2mm;font-weight:900;letter-spacing:-.02em;line-height:1;color:var(--white)}
+  .hero .l2 .chip{display:inline-flex;align-items:center;justify-content:center;
+    background:var(--white);color:var(--black);
+    font-size:8.2mm;font-weight:900;letter-spacing:0;line-height:1;
+    padding:1.1mm 1.9mm 1.6mm;border-radius:.7mm}
+  /* 명조는 반전(흰 글자/검정 바탕)에서 가로획이 날아간다 → 최소 500 */
+  .hero .claim{margin-top:2.6mm;font-size:2.4mm;font-weight:500;letter-spacing:-.005em;
+    color:rgba(255,255,255,.62);line-height:1.5}
+  .hero .claim b{color:var(--white);font-weight:700}
+
+  .foot{width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3mm}
+  .foot .place{font-family:var(--logo);font-size:1.85mm;font-weight:500;letter-spacing:.16em;
+    color:rgba(255,255,255,.36);text-transform:uppercase}
+  .foot .cred{font-size:2mm;font-weight:500;color:rgba(255,255,255,.4);white-space:nowrap}
+  .foot .cred b{color:var(--white);font-weight:700}
+
+  /* ═════════ 뒷면 — 흰 바탕 ═════════ */
+  .back{background:var(--white);color:var(--black)}
+  .back::after{content:"";position:absolute;left:0;right:0;top:0;height:2mm;background:var(--brand)}
+  .back .inner{position:relative;height:100%;z-index:2;
+    padding:calc(var(--safe) + 1mm) var(--safe) 4.4mm;
+    display:flex;flex-direction:column;justify-content:space-between}
+  .back .top{display:flex;justify-content:space-between;align-items:flex-start;gap:4mm}
+
+  .name{font-size:6mm;font-weight:900;letter-spacing:-.02em;line-height:1;color:var(--black)}
+  .role{margin-top:1.4mm;font-size:2.4mm;font-weight:500;color:rgba(0,0,0,.66)}
+  .badge{margin-top:1.8mm;display:inline-flex;align-items:center;gap:1.4mm;
+    border:.3mm solid var(--brand);border-radius:.8mm;padding:.8mm 1.7mm;
+    font-size:2.05mm;font-weight:700;color:var(--brand)}
+  .badge span{opacity:.4;font-weight:400}
+
+  .qr{width:13.5mm;height:13.5mm;flex:none;border:.3mm dashed rgba(0,0,0,.3);border-radius:.8mm;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5mm;
+    font-family:var(--logo);font-size:1.75mm;letter-spacing:.06em;color:rgba(0,0,0,.4);
+    text-align:center;line-height:1.3}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;column-gap:4mm;row-gap:1.1mm}
+  .contact div{display:flex;align-items:baseline;gap:1.6mm;font-size:2.25mm;font-weight:500;color:var(--black)}
+  .contact k{flex:none;width:9.5mm;font-family:var(--logo);font-size:1.8mm;font-weight:700;
+    letter-spacing:.09em;color:var(--brand);text-transform:uppercase}
+  .contact .full{grid-column:1 / -1}
+  .contact .han{font-family:var(--logo);font-weight:500;font-size:2.15mm}
+
+  .tag{width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3mm}
+  .tag .line{font-size:2.1mm;font-weight:700;color:var(--black)}
+  .tag .lockup{color:var(--black)}
+  .tag .lockup svg{width:5.2mm}
+  .tag .lockup .wm{font-size:1.55mm;letter-spacing:.24em;text-indent:.24em}
+
+  /* ── 인쇄: 재단 여백(3mm) 포함 실제 크기 ─────────── */
+  @page{size:96mm 56mm;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .stage{padding:0;gap:0;display:block}
+    .stage h1,.stage p.sub,.label,.swatches{display:none}
+    .sheet{display:block;gap:0}
+    .card{width:96mm;height:56mm;border-radius:0;box-shadow:none;page-break-after:always;break-after:page}
+    .front .inner{padding:calc(4.4mm + var(--bleed)) calc(var(--safe) + var(--bleed))
+                          calc(4.4mm + var(--bleed)) calc(var(--safe) + var(--bleed) + 2mm)}
+    .front::after{left:var(--bleed)}
+    .back .inner{padding:calc(var(--safe) + 1mm + var(--bleed)) calc(var(--safe) + var(--bleed))
+                         calc(4.4mm + var(--bleed))}
+    .back::after{top:var(--bleed)}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <h1>DOHA COFFEE <em>·</em> NAME CARD</h1>
+  <p class="sub">90 × 50 mm 표준 · 재단 여백 3mm 포함<br>브라우저에서 <b>인쇄(Ctrl/⌘+P) → 배경 그래픽 켜기 → 배율 100%</b></p>
+
+  <!-- 로고 심볼 정의 (한 번만) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="doha-mark" viewBox="0 0 47 37">
+    <ellipse cx="23.5" cy="5.5"  rx="23.5" ry="5.5"/>
+    <ellipse cx="23.5" cy="13.5" rx="23.5" ry="3.0"/>
+    <ellipse cx="23.5" cy="20.0" rx="21.5" ry="2.6"/>
+    <ellipse cx="23.5" cy="25.8" rx="19.0" ry="2.2"/>
+    <ellipse cx="23.5" cy="30.8" rx="13.5" ry="1.3"/>
+    <ellipse cx="23.5" cy="35.6" rx="6.8"  ry="1.1"/>
+  </symbol></svg>
+
+  <div class="sheet">
+    <div>
+      <div class="label">FRONT — 한눈에 사로잡는 면</div>
+      <!-- ══════════ 앞면 ══════════ -->
+      <div class="card front">
+        <div class="inner">
+          <div class="lockup">
+            <svg viewBox="0 0 47 37"><use href="#doha-mark"/></svg>
+            <div class="wm">DOHA COFFEE<sup>®</sup></div>
+          </div>
+
+          <div class="hero">
+            <div class="l1">커피는</div>
+            <div class="l2"><span class="t">오로지</span><span class="chip">맛</span></div>
+            <div class="claim">달고나 같은 <b>커피 오리지널 단맛</b>을<br>감이 아니라 <b>근거</b>로 굽고, 내립니다.</div>
+          </div>
+
+          <div class="foot">
+            <div class="place">Naju · Roastery &amp; Coffee Class</div>
+            <div class="cred"><b>8년</b> · <b>800명+</b> 교육</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">BACK — 신뢰와 연결의 면</div>
+      <!-- ══════════ 뒷면 ══════════ -->
+      <div class="card back">
+        <div class="inner">
+          <div class="top">
+            <div>
+              <div class="name">이도하</div>
+              <div class="role">로스터 · 바리스타 · 커피 클래스 강사</div>
+              <div class="badge">국가자격 평생교육사 <span>|</span> 바리스타</div>
+            </div>
+            <div class="qr">QR<br>YouTube</div>
+          </div>
+
+          <div>
+            <div class="contact">
+              <div><k>Tel</k>010-0000-0000</div>
+              <div><k>Insta</k><span class="han">@doha_coffee_bar</span></div>
+              <div class="full"><k>Store</k>전남 나주 ［ 주소 ］</div>
+              <div class="full"><k>YouTube</k>커피는 오로지 맛 핸드드립 도하커피</div>
+            </div>
+          </div>
+
+          <div class="tag">
+            <div class="line">피셜은 빼고, 맛만 담았습니다.</div>
+            <div class="lockup">
+              <svg viewBox="0 0 47 37"><use href="#doha-mark"/></svg>
+              <div class="wm">DOHA COFFEE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swatches">
+    <div class="sw"><i style="background:#000000"></i>#000000</div>
+    <div class="sw"><i style="background:#FFFFFF"></i>#FFFFFF</div>
+    <div class="sw"><i style="background:#7D2D36"></i>#7D2D36</div>
+  </div>
+</div>
+</body>
+</html>
