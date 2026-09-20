@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>도하커피 인스타 포스터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --black:#000000;
+    --white:#FFFFFF;
+    --brand:#7D2D36;
+    --serif:"Noto Serif KR","본명조","Nanum Myeongjo","Apple SD Gothic Neo",serif;
+    --logo:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#101010;font-family:var(--serif);-webkit-font-smoothing:antialiased;
+       display:flex;flex-direction:column;align-items:center;gap:40px;padding:40px 0}
+
+  body[data-only]{display:block;gap:0;padding:0;background:#000}
+  body[data-only] .wrap{display:none}
+  body[data-only="feed45"] #w-feed45,
+  body[data-only="square"] #w-square,
+  body[data-only="story"]  #w-story{display:block}
+  body[data-only] .cap{display:none}
+
+  .cap{color:#777;font-size:13px;letter-spacing:.18em;text-align:center;margin-bottom:10px;text-transform:uppercase}
+  .wrap{flex:none}
+
+  /* ── 포스터 캔버스 ─────────────────────────────── */
+  .poster{position:relative;overflow:hidden;background:var(--black);color:var(--white);
+          display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;
+          flex:none;padding:104px 92px 92px}
+  #feed45{width:1080px;height:1350px}
+  #square{width:1080px;height:1080px}
+  #story {width:1080px;height:1920px;padding:300px 92px 300px}
+
+  /* ── 로고 락업 ─────────────────────────────────── */
+  .lockup{display:inline-flex;flex-direction:column;align-items:center;gap:15px;color:inherit}
+  .lockup svg{display:block;width:112px;height:auto;fill:currentColor}
+  .lockup .wm{font-family:var(--logo);font-weight:500;font-size:25px;
+    letter-spacing:.26em;text-indent:.26em;line-height:1;white-space:nowrap}
+  .lockup .wm sup{font-size:.55em;vertical-align:super;letter-spacing:0}
+
+  /* ── 슬로건 ────────────────────────────────────── */
+  .hero .l1{font-size:100px;font-weight:700;letter-spacing:-.015em;line-height:1.06}
+  .hero .l2{display:flex;align-items:center;gap:24px;margin-top:14px}
+  .hero .l2 .t{font-size:166px;font-weight:900;letter-spacing:-.03em;line-height:.98}
+  /* '맛' — 흰 색면에 검은 글자. 검정 포스터에서 가장 밝은 한 점이 된다 */
+  .hero .l2 .chip{display:inline-flex;align-items:center;justify-content:center;
+    background:var(--white);color:var(--black);
+    font-size:166px;font-weight:900;letter-spacing:0;line-height:.98;
+    padding:24px 34px 38px;border-radius:14px}
+  /* 명조 반전(흰 글자/검정 바탕)은 가로획이 얇다 → 최소 500 */
+  .hero .claim{margin-top:52px;font-size:37px;font-weight:500;line-height:1.66;
+    letter-spacing:-.01em;color:rgba(255,255,255,.66)}
+  .hero .claim b{color:var(--white);font-weight:700}
+
+  /* ── 콜로폰 (포스터 하단 정보) ──────────────────── */
+  .colophon{width:100%}
+  .colophon .rule{width:64px;height:3px;background:var(--brand);margin-bottom:28px}
+
+  .who{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .who .name{font-size:40px;font-weight:700;letter-spacing:-.01em;color:var(--white)}
+  .who .role{font-size:27px;font-weight:500;color:rgba(255,255,255,.55)}
+
+  .cred{margin-top:14px;font-size:25px;font-weight:500;color:rgba(255,255,255,.42);line-height:1.5}
+  .cred b{color:rgba(255,255,255,.72);font-weight:700}
+
+  .channels{margin-top:26px;display:flex;flex-direction:column;gap:12px}
+  .channels div{display:flex;align-items:baseline;gap:20px;font-size:27px;font-weight:500}
+  .channels k{flex:none;width:128px;font-family:var(--logo);font-size:21px;font-weight:700;
+    letter-spacing:.1em;color:var(--brand);text-transform:uppercase}
+  .channels .han{font-family:var(--logo);font-weight:500;font-size:26px;letter-spacing:.01em}
+
+  /* ── 1:1 (세로 여유 없음 → 전용 축소) ───────────── */
+  #square{padding:76px 92px 72px}
+  #square .lockup{gap:12px}
+  #square .lockup svg{width:88px}
+  #square .lockup .wm{font-size:21px}
+  #square .hero .l1{font-size:80px}
+  #square .hero .l2{margin-top:10px;gap:20px}
+  #square .hero .l2 .t,#square .hero .l2 .chip{font-size:132px}
+  #square .hero .l2 .chip{padding:20px 28px 32px}
+  #square .hero .claim{margin-top:36px;font-size:32px;line-height:1.6}
+  #square .colophon .rule{margin-bottom:22px}
+  #square .who .name{font-size:36px}
+  #square .who .role{font-size:25px}
+  #square .cred{margin-top:12px;font-size:23px}
+  #square .channels{margin-top:20px;gap:10px}
+  #square .channels div{font-size:25px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="doha-mark" viewBox="0 0 47 37">
+  <ellipse cx="23.5" cy="5.5"  rx="23.5" ry="5.5"/>
+  <ellipse cx="23.5" cy="13.5" rx="23.5" ry="3.0"/>
+  <ellipse cx="23.5" cy="20.0" rx="21.5" ry="2.6"/>
+  <ellipse cx="23.5" cy="25.8" rx="19.0" ry="2.2"/>
+  <ellipse cx="23.5" cy="30.8" rx="13.5" ry="1.3"/>
+  <ellipse cx="23.5" cy="35.6" rx="6.8"  ry="1.1"/>
+</symbol></svg>
+
+<template id="tpl">
+  <div class="lockup"><svg viewBox="0 0 47 37"><use href="#doha-mark"/></svg><div class="wm">DOHA COFFEE<sup>®</sup></div></div>
+
+  <div class="hero">
+    <div class="l1">커피는</div>
+    <div class="l2"><span class="t">오로지</span><span class="chip">맛</span></div>
+    <div class="claim">달고나 같은 <b>커피 오리지널 단맛</b>을<br>감이 아니라 <b>근거</b>로 굽고, 내립니다.</div>
+  </div>
+
+  <div class="colophon">
+    <div class="rule"></div>
+    <div class="who">
+      <span class="name">이도하</span>
+      <span class="role">로스터 · 바리스타 · 커피 클래스 강사</span>
+    </div>
+    <div class="cred"><b>국가자격 평생교육사</b> · <b>8년</b> · <b>800명+</b> 교육 · 전남 나주 로스터리</div>
+    <div class="channels">
+      <div><k>Instagram</k><span class="han">@doha_coffee_bar</span></div>
+      <div><k>YouTube</k>커피는 오로지 맛 핸드드립 도하커피</div>
+    </div>
+  </div>
+</template>
+
+<div class="wrap" id="w-feed45"><div class="cap">Feed 4:5 — 1080 × 1350</div><div class="poster" id="feed45"></div></div>
+<div class="wrap" id="w-square"><div class="cap">Feed 1:1 — 1080 × 1080</div><div class="poster" id="square"></div></div>
+<div class="wrap" id="w-story"><div class="cap">Story 9:16 — 1080 × 1920</div><div class="poster" id="story"></div></div>
+
+<script>
+  var tpl = document.getElementById('tpl');
+  ['feed45','square','story'].forEach(function(id){
+    document.getElementById(id).appendChild(tpl.content.cloneNode(true));
+  });
+  var m = location.hash.slice(1);
+  if (m) document.body.setAttribute('data-only', m);
+</script>
+</body>
+</html>
